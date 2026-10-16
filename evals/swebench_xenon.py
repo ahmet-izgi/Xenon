@@ -78,18 +78,30 @@ def _git(cwd: Path, *args: str) -> str:
     return subprocess.check_output(["git", *args], cwd=cwd, text=True).strip()
 
 
+def _fail_hint_enabled() -> bool:
+    """是否把 FAIL_TO_PASS 测试名注入任务提示词。
+
+    标准 SWE-bench 协议只提供 issue 描述——测试名属于评测元数据，注入即
+    泄露答案。历史 v0.8.3–v0.9.4 的适配器默认注入（当时作为研究对照），
+    2026-10-16 审计后改为默认关闭；需要复现旧口径时显式设
+    ``XENON_EVAL_FAIL_HINT=1``。
+    """
+
+    return os.environ.get("XENON_EVAL_FAIL_HINT", "0").strip() == "1"
+
+
 def _prompt(instance: dict[str, Any]) -> str:
-    # FAIL_TO_PASS 测试名（test_patch 已应用，在原始代码上应失败）
-    fail_tests = instance.get("FAIL_TO_PASS", [])
     fail_hint = ""
-    if fail_tests:
-        # 取前 3 个测试名（prompt 太长会稀释注意力）
-        samples = fail_tests[:3]
-        fail_hint = (
-            "\n\n以下测试在原始代码上失败，你的修复应让它们通过：\n"
-            + "\n".join(f"  - {t}" for t in samples)
-            + ("\n  ...（等）" if len(fail_tests) > 3 else "")
-        )
+    if _fail_hint_enabled():
+        fail_tests = instance.get("FAIL_TO_PASS", [])
+        if fail_tests:
+            # 取前 3 个测试名（prompt 太长会稀释注意力）
+            samples = fail_tests[:3]
+            fail_hint = (
+                "\n\n以下测试在原始代码上失败，你的修复应让它们通过：\n"
+                + "\n".join(f"  - {t}" for t in samples)
+                + ("\n  ...（等）" if len(fail_tests) > 3 else "")
+            )
     return f"""You are fixing an official SWE-bench task in the current repository.
 Work directly in this working directory.  Inspect the code, implement the
 minimal correct fix, and __run focused tests to verify your fix__.
