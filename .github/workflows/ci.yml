@@ -52,14 +52,18 @@ jobs:
             -m "not live and not e2e" \
             -q --tb=short \
             --cov=xenon \
-            --cov-report=xml \
             --cov-report=term-missing \
             --cov-fail-under=70 \
             --timeout=120 \
             --no-header
 
-      - name: Deterministic CLI end-to-end
-        run: python -m pytest tests/e2e -m e2e -q --tb=short --timeout=60
+      # Coverage is merged (--cov-append) so the CLI entry paths exercised only
+      # by the e2e suite land in the upload instead of being discarded.
+      - name: Deterministic CLI end-to-end + merged coverage
+        run: |
+          python -m pytest tests/e2e -m e2e \
+            -q --tb=short --timeout=60 \
+            --cov=xenon --cov-append --cov-report=xml
 
       - name: Upload to Codecov
         uses: codecov/codecov-action@v7

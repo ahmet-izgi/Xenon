@@ -15,3 +15,75 @@ tasks:
     command: /cost
     assertions:
       answer_contains_any: ["缓存", "cache", "费用", "cost"]
+  - id: repl-status
+    command: /status
+    assertions:
+      answer_contains_any: ["系统状态", "范式", "上下文"]
+  - id: repl-permissions
+    command: /permissions
+    assertions:
+      answer_contains_any: ["权限模式", "default", "accept_edits"]
+  - id: repl-evidence
+    command: /evidence
+    assertions:
+      answer_contains_any: ["证据", "链"]
+  - id: repl-sessions
+    command: /sessions
+    assertions:
+      answer_contains_any: ["会话"]
+  - id: repl-context
+    command: /context
+    assertions:
+      answer_contains_any: ["上下文", "消息"]
+  - id: repl-cache
+    command: /cache
+    assertions:
+      answer_contains_any: ["缓存", "COLD", "cache"]
+  - id: repl-goal
+    command: /goal
+    assertions:
+      answer_contains_any: ["目标"]
+  - id: repl-plan
+    command: /plan
+    assertions:
+      answer_contains_any: ["计划模式"]
+  - id: repl-config
+    command: /config
+    assertions:
+      answer_contains_any: ["当前配置", "models"]
+  - id: repl-history
+    command: /history
+    assertions:
+      answer_contains_any: ["历史", "history"]
+  - id: repl-verbose
+    command: /verbose
+    assertions:
+      answer_contains_any: ["详细模式"]
+  - id: repl-thinking
+    command: /thinking
+    assertions:
+      answer_contains_any: ["推理过程", "思考"]
+  - id: repl-project
+    command: /project
+    assertions:
+      answer_contains_any: ["项目类型", "根目录"]
+  - id: repl-shortcut
+    command: /shortcut
+    assertions:
+      answer_contains_any: ["快捷指令"]
+  - id: repl-mcp
+    command: /mcp
+    assertions:
+      answer_contains_any: ["MCP"]
+  - id: repl-memory
+    command: /memory
+    assertions:
+      answer_contains_any: ["记忆", "memory"]
+  - id: repl-skill
+    command: /skill
+    assertions:
+      answer_contains_any: ["技能", "Skill"]
+  - id: repl-debug-tokens
+    command: /debug-tokens
+    assertions:
+      answer_contains_any: ["Token", "token"]

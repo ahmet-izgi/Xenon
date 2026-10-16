@@ -135,7 +135,7 @@ def cmd_debug_tokens(*, args: str, session_state: dict, **kwargs: Any) -> str:
     if not repl:
         return "❌ 无法获取 REPL 状态"
 
-    ctx = repl.context
+    ctx = repl.ctx_mgr
     if not ctx:
         return "❌ 无法获取 ContextManager"
 
