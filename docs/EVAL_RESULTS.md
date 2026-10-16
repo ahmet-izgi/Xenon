@@ -417,3 +417,29 @@ python evals/runner.py \
 - 因子分解中 v0.8.2 的 10 步基线（#1）原为 heyroute 中转环境（2026-08-13），#3 为官方 API 直连；两个端点上 v0.9.4+ 的 10 步结果完全一致（9/30），提示端点差异对分数影响有限。此历史差异无法完全消除，列出以保持透明。
 
 **判定环境修复（仅可靠性，无协议影响）**：本机到 `raw.githubusercontent.com` 的连接会间歇性「TLS 握手成功但数据黑洞」，而官方 harness 的 `get_requirements_by_commit` 使用无超时的 `requests.get`，判定会无限挂起（本次发生两次，均以 py-spy 定位）。处理：① 给 harness 的 4 处 `requests.get` 加 `timeout=60`（原文件保留 `.bak-before-timeout-patch` 备份）；② 通过 venv `.pth` 注入进程级 shim（`zz_swebench_http_shim`），对 `raw.githubusercontent.com` 走「磁盘缓存 + 有界重试」。两者都不改变取回文件的字节内容，仅把无限挂起变为重试。缓存目录 `/root/swebench-http-cache`。
+
+### 9.10 留出集预注册：样本污染对照（2026-10-16，跑前冻结）
+
+**动机**：9.9 的 2×2 全部使用同一 30 例（seed `20260729`）。审计发现该样本上存在**针对性调优痕迹**——提交历史直接点名其中 9 例（`django-16408`、`matplotlib-24970`、`sphinx-7738` 各 2 次等），且 v0.8.2 的交付补救/验证闭环、v0.8.3 的 plan-execute 迷你轮次都被标注为「SWE-bench 实测」产物。若旧世代的优势部分来自「见过这套题」，则在**与之零重叠**的留出样本上，旧版成绩应下降更多。
+
+**预注册字段（结果产生前冻结）**：
+
+| 字段 | 值 |
+|---|---|
+| 清单 | `evals/manifests/swebench-lite-30-heldout-seed20261016.json` |
+| 抽样命令 | `evals/swebench_select.py --size 30 --seed 20261016 --calibration-size 5 --exclude evals/manifests/swebench-lite-30-seed20260729.json` |
+| 抽样池 | 数据集 300 例 − 原 30 例 = **270 例** |
+| 与原样本重叠 | **0**（已核验） |
+| digest | `e594893cc05337a87617d302c1c35094f005f8375a06775fa79c043005439489` |
+| 协议 | 与 9.9 完全一致：react / 120 步 / `deepseek-v4-flash` 官方 API / `--reasoning-effort off` / 盲测（`XENON_EVAL_APPLY_TEST_PATCH=0`）/ 不注入 FAIL_TO_PASS（`XENON_EVAL_FAIL_HINT=0`） |
+| 对照 | v0.8.5（tag `7784024`，评测脚手架打同款协议补丁） vs main（`7be984d` 及以后） |
+| 重复 | 每条件 **3 次**，逐次报告 resolved、均值与极差 |
+| 判定 | 官方 harness，同一判定脚本、同一镜像缓存 |
+
+**判定规则（预先写死）**：
+
+1. 若留出集上「旧 − 新」的 delta 明显小于原样本（或反转）→ 支持污染假说：9.9 的「未测到框架增益」应改述为「原样本上的旧版优势至少部分来自样本内调优」。
+2. 若留出集上 delta 与原样本相近 → 污染假说不成立，9.9 结论维持。
+3. 两个样本的结果**分开报告**，不合并计算；留出集结果是关于框架增益的主证据。
+
+**工具变更**：`evals/swebench_select.py` 新增 `--exclude`（可重复，支持零重叠留出集）；新增 `tests/test_swebench_select.py`（确定性、分层配额、校准子集、摘要敏感度、排除语义）。

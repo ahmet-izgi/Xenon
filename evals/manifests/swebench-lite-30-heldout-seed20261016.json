@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "dataset": "SWE-bench/SWE-bench_Lite",
+  "split": "test",
+  "population": 270,
+  "seed": 20261016,
+  "excluded": {
+    "count": 30,
+    "sources": [
+      "evals/manifests/swebench-lite-30-seed20260729.json"
+    ]
+  },
+  "selection_rule": "repo-stratified proportional allocation (largest remainder); within-stratum seeded random.Random(f'{seed}:{repo}').sample over instance_id-sorted candidates",
+  "size": 30,
+  "instance_ids": [
+    "astropy__astropy-7746",
+    "django__django-11019",
+    "django__django-11620",
+    "django__django-11905",
+    "django__django-13028",
+    "django__django-13590",
+    "django__django-13660",
+    "django__django-14752",
+    "django__django-14855",
+    "django__django-14999",
+    "django__django-15695",
+    "django__django-16139",
+    "matplotlib__matplotlib-23563",
+    "matplotlib__matplotlib-25498",
+    "psf__requests-2317",
+    "pydata__xarray-4248",
+    "pylint-dev__pylint-7080",
+    "pytest-dev__pytest-6116",
+    "pytest-dev__pytest-8365",
+    "scikit-learn__scikit-learn-10949",
+    "scikit-learn__scikit-learn-15535",
+    "sphinx-doc__sphinx-8506",
+    "sympy__sympy-12419",
+    "sympy__sympy-13437",
+    "sympy__sympy-17655",
+    "sympy__sympy-18087",
+    "sympy__sympy-20154",
+    "sympy__sympy-20590",
+    "sympy__sympy-21055",
+    "sympy__sympy-21847"
+  ],
+  "calibration_ids": [
+    "django__django-11019",
+    "django__django-14752",
+    "matplotlib__matplotlib-23563",
+    "pytest-dev__pytest-8365",
+    "sympy__sympy-20590"
+  ],
+  "population_repo_counts": {
+    "astropy/astropy": 5,
+    "django/django": 103,
+    "matplotlib/matplotlib": 21,
+    "mwaskom/seaborn": 4,
+    "pallets/flask": 3,
+    "psf/requests": 5,
+    "pydata/xarray": 5,
+    "pylint-dev/pylint": 5,
+    "pytest-dev/pytest": 15,
+    "scikit-learn/scikit-learn": 21,
+    "sphinx-doc/sphinx": 14,
+    "sympy/sympy": 69
+  },
+  "selected_repo_counts": {
+    "astropy/astropy": 1,
+    "django/django": 11,
+    "matplotlib/matplotlib": 2,
+    "psf/requests": 1,
+    "pydata/xarray": 1,
+    "pylint-dev/pylint": 1,
+    "pytest-dev/pytest": 2,
+    "scikit-learn/scikit-learn": 2,
+    "sphinx-doc/sphinx": 1,
+    "sympy/sympy": 8
+  },
+  "digest": "e594893cc05337a87617d302c1c35094f005f8375a06775fa79c043005439489"
+}

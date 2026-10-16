@@ -47,6 +47,20 @@ def _largest_remainder(counts: dict[str, int], total: int) -> dict[str, int]:
     return quota
 
 
+def exclude_ids(
+    instances: list[dict[str, Any]], excluded_ids: list[str]
+) -> list[dict[str, Any]]:
+    """Drop every instance whose id appears in ``excluded_ids``.
+
+    Used to build *held-out* samples that are disjoint from an earlier manifest:
+    a subset score is only comparable when the two samples share no instance
+    that either side could have been tuned on.
+    """
+
+    excluded = set(excluded_ids)
+    return [row for row in instances if row["instance_id"] not in excluded]
+
+
 def select(
     instances: list[dict[str, Any]],
     size: int,
@@ -113,6 +127,16 @@ def main() -> int:
     parser.add_argument("--size", type=int, default=30)
     parser.add_argument("--calibration-size", type=int, default=5)
     parser.add_argument("--seed", type=int, default=20260729)
+    parser.add_argument(
+        "--exclude",
+        type=Path,
+        action="append",
+        default=[],
+        help=(
+            "Manifest file whose instance_ids must not be selected (repeatable). "
+            "Use it to draw a held-out sample disjoint from an earlier manifest."
+        ),
+    )
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
 
@@ -120,6 +144,15 @@ def main() -> int:
 
     data = load_dataset(args.dataset, split=args.split)
     instances = [{"instance_id": r["instance_id"], "repo": r["repo"]} for r in data]
+
+    excluded_ids: list[str] = []
+    for exclude_path in args.exclude:
+        payload = json.loads(exclude_path.read_text(encoding="utf-8"))
+        excluded_ids.extend(payload.get("instance_ids") or [])
+    excluded_ids = sorted(set(excluded_ids))
+    if excluded_ids:
+        instances = exclude_ids(instances, excluded_ids)
+
     picked = select(instances, args.size, args.seed, args.calibration_size)
 
     repo_of = {r["instance_id"]: r["repo"] for r in instances}
@@ -129,6 +162,10 @@ def main() -> int:
         "split": args.split,
         "population": len(instances),
         "seed": args.seed,
+        "excluded": {
+            "count": len(excluded_ids),
+            "sources": [str(path) for path in args.exclude],
+        },
         "selection_rule": (
             "repo-stratified proportional allocation (largest remainder); "
             "within-stratum seeded random.Random(f'{seed}:{repo}').sample over "
