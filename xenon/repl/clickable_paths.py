@@ -60,13 +60,17 @@ def make_clickable(file_path: str, line: int = 0, display: str | None = None) ->
 _PATH_PATTERN = re.compile(
     r"(?<!\w)"
     r"("
-    r"(?:~|\.\.?)?"  # ~ / . / ..
-    r"(?:/[-\w.+@]+)+"  # /path/to/file
+    r"(?:(?:~|\.\.?)?/|/)[-\w.+@]+(?:/[-\w.+@]+)*"  # prefixed path
     r"(?:\.\w+)?"  # .extension (optional)
     r"(?::\d+)?"  # :line_number (optional)
     r"|"
-    r"[A-Za-z]:\\[-\w.\\ +@]+"  # Windows: C:\path\to\file
-    r"(?:\.\w+)?"
+    r"(?:[-\w.+@]+/)+[-\w.+@]+"  # bare-relative path
+    r"(?:\.\w+)?"  # .extension (optional)
+    r"(?::\d+)?"  # :line_number (optional)
+    r"|"
+    # Stop at the file extension so following prose is not swallowed. Keep
+    # spaces before it so paths such as `C:\Program Files\app.py` still work.
+    r"[A-Za-z]:\\[-\w.\\ +@]*?\.\w+(?::\d+)?(?=$|[\s,;:!?)}\].])"
     r")"
     r"(?!\w)"
 )
@@ -127,6 +131,10 @@ _CODE_EXTS = frozenset(
 
 def _is_likely_path(text: str) -> bool:
     """检查文本是否可能是一个文件路径（而非误匹配）。"""
+    # A relative path with a line anchor has an apparent extension of `.py:42`.
+    # Ignore the anchor while deciding whether the path has a known extension.
+    text = re.sub(r":\d+$", "", text)
+
     # 绝对路径几乎肯定是
     if text.startswith("/") or text.startswith("~/"):
         return True
@@ -137,8 +145,10 @@ def _is_likely_path(text: str) -> bool:
     _, ext = os.path.splitext(text)
     if ext.lower() in _CODE_EXTS:
         return True
-    # 包含多个路径段的可能是路径
-    if text.count("/") >= 2:
+    # Extensionless bare paths are ambiguous with slash-separated prose. Accept
+    # them only when they resolve to a real local file; known code extensions
+    # above remain linkable even when the file is not present in the cwd.
+    if text.count("/") >= 2 and os.path.isfile(text):
         return True
     return False
 
@@ -161,6 +171,32 @@ def format_output_with_links(text: str) -> str:
     result_parts: list[str] = []
     in_code_block = False
 
+    def osc8_link_spans(line: str) -> list[tuple[int, int]]:
+        """Return spans already wrapped in OSC-8, including their display text."""
+        open_marker = f"{_OSC8};"
+        close_marker = f"{_OSC8};;{_ST}"
+        spans = []
+        cursor = 0
+        while (start := line.find(open_marker, cursor)) != -1:
+            params_end = line.find(";", start + len(open_marker))
+            if params_end == -1:
+                break
+            uri_end = line.find(_ST, params_end + 1)
+            if uri_end == -1:
+                break
+            # A closing OSC-8 sequence also starts with ESC ] 8 ; ;. Its
+            # empty URI means it is not an opening link.
+            if uri_end == params_end + 1:
+                cursor = uri_end + len(_ST)
+                continue
+            close_start = line.find(close_marker, uri_end + len(_ST))
+            if close_start == -1:
+                break
+            end = close_start + len(close_marker)
+            spans.append((start, end))
+            cursor = end
+        return spans
+
     for line in text.splitlines(keepends=True):
         stripped = line.strip()
         # 检测 Markdown 代码块边界
@@ -176,6 +212,7 @@ def format_output_with_links(text: str) -> str:
 
         # 查找并替换路径为可点击链接
         cursor = 0
+        existing_links = osc8_link_spans(line)
         for m in _PATH_PATTERN.finditer(line):
             path = m.group(0)
             if not _is_likely_path(path):
@@ -183,11 +220,8 @@ def format_output_with_links(text: str) -> str:
 
             start, end = m.start(), m.end()
 
-            # 检查是否在 OSC-8 链接内（避免嵌套）
-            before = line[cursor:start]
-            if _OSC8 in before and before.rfind(_OSC8) > before.rfind(
-                _ST if _ST in before else "\x00"
-            ):
+            # Leave both the URI and label of an existing OSC-8 link untouched.
+            if any(link_start <= start < link_end for link_start, link_end in existing_links):
                 continue
 
             # 追加匹配之前的文本
@@ -198,7 +232,7 @@ def format_output_with_links(text: str) -> str:
             clean_path = path
             if (
                 ":" in path
-                and not path.startswith(("~", ".", "C:"))
+                and not path.startswith(("~", "."))
                 and "://" not in path
             ):
                 candidate_parts = path.rsplit(":", 1)

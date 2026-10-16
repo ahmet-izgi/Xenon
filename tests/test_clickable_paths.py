@@ -1,10 +1,4 @@
-"""OSC-8 可点击路径工具测试（此前 0% 覆盖）。
-
-测试按**当前实现行为**编写；两处已知限制用显式用例钉住，便于将来修复时
-翻转：模块 docstring 声称 ``src/main.py:42`` 会被自动转换，但实际只转换
-``/``、``./``、``~/`` 前缀路径与 Windows 盘符路径；Windows 路径后跟
-``空格+单词``时会被正则吞掉而放弃转换。
-"""
+"""OSC-8 可点击路径工具测试，包括已修复的相对路径和重复格式化边界。"""
 
 from __future__ import annotations
 
@@ -44,7 +38,6 @@ def test_is_likely_path_accepts_absolute_home_relative_and_code_files():
     assert cp._is_likely_path("~/notes.txt")
     assert cp._is_likely_path("./src/app.py")
     assert cp._is_likely_path("../sibling/app.py")
-    assert cp._is_likely_path("docs/guide/setup")
     assert cp._is_likely_path("main.rs")
 
 
@@ -52,6 +45,7 @@ def test_is_likely_path_rejects_prose_fragments():
     assert not cp._is_likely_path("hello")
     assert not cp._is_likely_path("a/b")
     assert not cp._is_likely_path("either/or")
+    assert not cp._is_likely_path("yes/no/maybe")
 
 
 # ── format_output_with_links ─────────────────────────────
@@ -61,6 +55,12 @@ def test_format_output_with_links_converts_prefixed_paths():
     out = cp.format_output_with_links("edit /home/u/main.py now")
     assert f"{ESC}]8;;file://" in out
     assert "/home/u/main.py" in out
+
+
+def test_format_output_with_links_leaves_slash_separated_prose_untouched():
+    text = "Choose yes/no/maybe"
+
+    assert cp.format_output_with_links(text) == text
 
 
 def test_format_output_with_links_parses_line_number_for_unix_paths():
@@ -89,32 +89,72 @@ def test_format_output_with_links_empty_text_is_returned_as_is():
 
 
 def test_known_limit_repeated_formatting_double_wraps():
-    """对已格式化文本再跑一次会重复包链接（实现未做幂等保护）。"""
+    """原已知限制现在应被修复：再次格式化保留原链接且不嵌套。"""
 
     once = cp.format_output_with_links("see /home/u/main.py")
     twice = cp.format_output_with_links(once)
-    assert twice != once
+    assert twice == once
+
+
+def test_repeated_formatting_links_new_paths_after_existing_links():
+    once = cp.format_output_with_links("see /home/u/main.py")
+    combined = once + " and /home/u/other.py"
+
+    formatted = cp.format_output_with_links(combined)
+
+    assert formatted.startswith(once)
+    assert "other.py" in formatted
+    assert cp.format_output_with_links(formatted) == formatted
+
+
+def test_parameterized_osc8_links_are_preserved_without_double_wrapping():
+    link = f"{ESC}]8;id=1;file:///tmp/main.py{ESC}\\/tmp/main.py{ESC}]8;;{ESC}\\"
+
+    assert cp.format_output_with_links(link) == link
+    assert cp.format_output_with_links(cp.format_output_with_links(link)) == link
 
 
 def test_windows_path_with_line_number_is_converted():
     win = "C:" + chr(92) + "Users" + chr(92) + "a" + chr(92) + "b.py:12"
     out = cp.format_output_with_links("see " + win)
+    assert "#L12" in out
+    assert not out.split(f"{ESC}\\", 1)[0].endswith(":12")
+
+
+def test_windows_path_followed_by_sentence_period_is_linked_without_period():
+    win = "C:" + chr(92) + "Users" + chr(92) + "a" + chr(92) + "b.py"
+    out = cp.format_output_with_links("See " + win + ".")
+
     assert f"{ESC}]8;;file://" in out
+    assert out.endswith(".")
+    assert f"{win}{ESC}]8;;" in out
 
 
-# ── 已知限制（修复后应翻转这两个用例）─────────────────────
+# ── 之前记录的限制 ───────────────────────────────────────
 
 
 def test_known_limit_bare_relative_paths_are_not_linked():
-    """docstring 的例子 ``src/main.py:42`` 实际不转换（正则要求 / ./ ~/ 前缀）。"""
+    """原已知限制现在应被修复：docstring 示例转换并保留行号锚点。"""
 
     out = cp.format_output_with_links("See src/main.py:42 for details")
-    assert ESC not in out
+    assert f"{ESC}]8;;file://" in out
+    assert "#L42" in out
+    assert "src/main.py:42" in out
 
 
 def test_known_limit_windows_path_followed_by_words_is_dropped():
-    """Windows 分支的字符类包含空格，会吞掉后续单词导致判定为非路径。"""
+    """原已知限制现在应被修复：后续普通文字不能被路径匹配吞掉。"""
 
     win = "C:" + chr(92) + "Users" + chr(92) + "a" + chr(92) + "b.py"
     out = cp.format_output_with_links("see " + win + " end")
-    assert ESC not in out
+    assert f"{ESC}]8;;file://" in out
+    assert win in out
+    assert out.endswith(" end")
+
+
+def test_windows_path_with_spaces_followed_by_words_is_linked():
+    win = "C:" + chr(92) + "Program Files" + chr(92) + "app.py"
+    out = cp.format_output_with_links("see " + win + " end")
+    assert f"{ESC}]8;;file://" in out
+    assert win in out
+    assert out.endswith(" end")
