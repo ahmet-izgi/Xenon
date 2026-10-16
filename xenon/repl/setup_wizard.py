@@ -390,42 +390,62 @@ def _select_model(registry: ModelRegistry, model_pool=None) -> None:
         console.print("[yellow]未能实时获取任何模型，请检查上方错误原因[/yellow]\n")
         return
 
-    choice = IntPrompt.ask(
+    choice = Prompt.ask(
         "输入模型编号（可选择多个，用空格分隔，如 1 3 5）",
         default="1",
     )
 
-    # 解析多选
-    selections = [int(x) for x in str(choice).split() if x.isdigit()]
+    # 解析多选；遇到坏输入时拒绝整组，避免悄悄忽略用户输入的一部分。
+    try:
+        selections = [int(x) for x in str(choice).split()]
+    except ValueError:
+        console.print("\n[yellow]输入无效，请输入以空格分隔的模型编号[/yellow]\n")
+        return
+
+    # Keep the first-seen order while ignoring repeated choices.
+    selections = list(dict.fromkeys(selections))
+    if any(not 1 <= selection <= len(all_models) for selection in selections):
+        console.print("\n[yellow]模型编号超出范围，请重新选择[/yellow]\n")
+        return
+
     selected_models = []
     for s in selections:
-        if 1 <= s <= len(all_models):
-            model_id, short_name, provider = all_models[s - 1]
-            alias = short_name.replace(".", "-")
-            registry.add_model(model_id, alias)
-            selected_models.append(f"{alias} ({model_id})")
-            # v0.4.0: also register in model pool for auto-routing
-            if model_pool:
-                provider_info = PROVIDERS.get(provider)
-                api_key = ""
-                base_url = ""
-                if provider_info:
-                    creds = load_credentials()
-                    from xenon.repl.provider_registry import _resolve_api_key
+        model_id, short_name, provider = all_models[s - 1]
+        alias = short_name.replace(".", "-")
+        if alias in registry.models and registry.models[alias].model_id != model_id:
+            base_alias = f"{provider}-{alias}"
+            alias = base_alias
+            suffix = 2
+            while (
+                alias in registry.models
+                and registry.models[alias].model_id != model_id
+            ):
+                alias = f"{base_alias}-{suffix}"
+                suffix += 1
+        registry.add_model(model_id, alias)
+        selected_models.append(f"{alias} ({model_id})")
+        # v0.4.0: also register in model pool for auto-routing
+        if model_pool:
+            provider_info = PROVIDERS.get(provider)
+            api_key = ""
+            base_url = ""
+            if provider_info:
+                creds = load_credentials()
+                from xenon.repl.provider_registry import _resolve_api_key
 
-                    api_key = _resolve_api_key(provider, provider_info, creds)
-                    base_url = provider_info.base_url
-                model_pool.register(
-                    model_id,
-                    alias=alias,
-                    weight=3.0,
-                    api_key=api_key,
-                    base_url=base_url,
-                    # benchmark_fetcher 的 HF 排行榜端点已永久 404，estimate_tier
-                    # 必然回退到 _infer_capability 的 tier，这次请求只会让 /setup
-                    # 每个模型白等一个注定失败的往返。
-                    skip_benchmark=True,
-                )
+                api_key = _resolve_api_key(provider, provider_info, creds)
+                base_url = provider_info.base_url
+            model_pool.register(
+                model_id,
+                alias=alias,
+                weight=3.0,
+                api_key=api_key,
+                base_url=base_url,
+                # benchmark_fetcher 的 HF 排行榜端点已永久 404，estimate_tier
+                # 必然回退到 _infer_capability 的 tier，这次请求只会让 /setup
+                # 每个模型白等一个注定失败的往返。
+                skip_benchmark=True,
+            )
 
     if selected_models:
         # 自动设置 planner 角色
