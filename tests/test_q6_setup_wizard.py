@@ -163,7 +163,7 @@ def _configured_model_providers():
     ]
 
 
-def _select_models_for_input(monkeypatch, response, providers=None):
+def _select_models_for_input(monkeypatch, response, providers=None, model_pool=None):
     import xenon.repl.setup_wizard as sw
 
     configured_providers = providers or _configured_model_providers()
@@ -186,7 +186,7 @@ def _select_models_for_input(monkeypatch, response, providers=None):
     monkeypatch.setattr(sw.IntPrompt, "ask", reject_integer_prompt)
 
     registry = ModelRegistry()
-    sw._select_model(registry)
+    sw._select_model(registry, model_pool)
     return registry
 
 
@@ -217,6 +217,66 @@ def test_select_model_keeps_same_named_models_from_different_providers(monkeypat
         "openrouter-gpt-4o": "openrouter/gpt-4o",
     }
     assert registry.role_priority["planner"] == ["gpt-4o", "openrouter-gpt-4o"]
+
+
+def test_select_model_suffixes_alias_when_provider_alias_is_taken(monkeypatch):
+    providers = [
+        SimpleNamespace(
+            key="openai",
+            name="OpenAI",
+            models=["gpt-4o", "openrouter-gpt-4o"],
+        ),
+        SimpleNamespace(key="openrouter", name="OpenRouter", models=["gpt-4o"]),
+    ]
+
+    registry = _select_models_for_input(monkeypatch, "1 2 3", providers=providers)
+
+    assert {alias: model.model_id for alias, model in registry.models.items()} == {
+        "gpt-4o": "openai/gpt-4o",
+        "openrouter-gpt-4o": "openai/openrouter-gpt-4o",
+        "openrouter-gpt-4o-2": "openrouter/gpt-4o",
+    }
+    assert registry.role_priority["planner"] == [
+        "gpt-4o",
+        "openrouter-gpt-4o",
+        "openrouter-gpt-4o-2",
+    ]
+
+
+def test_select_model_registers_selected_models_in_pool(monkeypatch):
+    import xenon.repl.provider_registry as provider_registry
+    import xenon.repl.setup_wizard as sw
+
+    calls = []
+    model_pool = SimpleNamespace(register=lambda *args, **kwargs: calls.append((args, kwargs)))
+    provider_info = SimpleNamespace(base_url="https://api.example.test")
+    monkeypatch.setattr(sw, "PROVIDERS", {"openai": provider_info})
+    monkeypatch.setattr(sw, "load_credentials", lambda: {"openai": "test-key"})
+    monkeypatch.setattr(
+        provider_registry,
+        "_resolve_api_key",
+        lambda provider, info, creds: creds[provider],
+    )
+
+    registry = _select_models_for_input(
+        monkeypatch,
+        "1",
+        model_pool=model_pool,
+    )
+
+    assert registry.role_priority["planner"] == ["gpt-4o"]
+    assert calls == [
+        (
+            ("openai/gpt-4o",),
+            {
+                "alias": "gpt-4o",
+                "weight": 3.0,
+                "api_key": "test-key",
+                "base_url": "https://api.example.test",
+                "skip_benchmark": True,
+            },
+        )
+    ]
 
 
 def test_select_model_deduplicates_repeated_indices(monkeypatch):
