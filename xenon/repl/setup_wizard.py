@@ -496,10 +496,10 @@ def _remove_api_key(registry: "ModelRegistry") -> None:
         choices=["0"] + [str(i) for i in range(1, len(configured) + 1)],
     )
 
-    if choice == "0":
+    if choice == 0:
         return
 
-    provider = configured[int(choice) - 1]
+    provider = configured[choice - 1]
     if Confirm.ask(f"确认删除 {provider.name} 的 API Key?"):
         remove_provider_key(provider.key)
         removed = _purge_provider_models(registry, provider.key)
