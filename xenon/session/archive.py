@@ -13,7 +13,6 @@ source for read-only recall.
 
 from __future__ import annotations
 
-
 # 归档里每个回合的工具记录上限与输出上限。
 _MAX_TOOLS_PER_TURN = 6
 _MAX_ARCHIVE_TURNS = 40

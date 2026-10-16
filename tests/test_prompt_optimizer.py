@@ -5,10 +5,10 @@ Prompt Optimizer 测试。
 from __future__ import annotations
 
 from xenon.repl.prompt_optimizer import (
-    detect_intent,
-    optimize_prompt,
     assess_quality,
+    detect_intent,
     get_intent_display,
+    optimize_prompt,
 )
 
 

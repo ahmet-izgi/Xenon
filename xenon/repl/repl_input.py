@@ -206,9 +206,9 @@ def _read_input_unix(self) -> str:
     使用时将终端设为原始模式，逐字节读取并解析 ANSI 转义序列。
     粘贴多行文本会被自动检测并正确处理。
     """
-    import sys
     import codecs
     import os
+    import sys
     import termios
     import tty
     import unicodedata

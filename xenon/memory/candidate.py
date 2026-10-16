@@ -7,7 +7,6 @@ import re
 from xenon.memory.compiler import estimate_tokens
 from xenon.memory.models import MemoryKind, MemoryProposal, MemoryScope
 
-
 _SECRET_PATTERNS = (
     re.compile(
         r"\b(?:api[_-]?key|access[_-]?token|secret|password|passwd)\b\s*[:=]", re.I

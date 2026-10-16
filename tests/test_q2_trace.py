@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import logging
 
-from xenon.engine.trace import new_run_id, new_call_id, prefix, trace_logger
-
+from xenon.engine.trace import new_call_id, new_run_id, prefix, trace_logger
 
 # --------------------------- ID 生成 ---------------------------
 

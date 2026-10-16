@@ -10,11 +10,11 @@ LLM Client — 多厂商统一调用适配器。
 from __future__ import annotations
 
 import json
+import logging
 import os
 from collections.abc import Generator
 from typing import Any
 
-import logging
 import httpx
 
 from xenon.utils.partial_response import (
@@ -26,6 +26,7 @@ from xenon.utils.prompt_compiler import (
     compile_prompt,
 )
 
+
 # Phase 3: 检查点管理器
 # 延迟导入，避免循环依赖
 def _get_checkpoint_manager():
@@ -36,12 +37,11 @@ def _get_checkpoint_manager():
 logger = logging.getLogger(__name__)
 
 from xenon.utils.llm_errors import ResponseTruncatedError  # noqa: F401,E402
-from xenon.utils.llm_usage import _emit_response, _usage_tl  # noqa: F401,E402
 from xenon.utils.llm_transport import (  # noqa: F401,E402
-    ModelEndpoint,
     _CLIENT_LOCK,
     _CLIENT_POOL,
     _CREDENTIALS_PATH,
+    ModelEndpoint,
     _build_proxy_config,
     _client_pool_key,
     _create_http_client,
@@ -54,20 +54,21 @@ from xenon.utils.llm_transport import (  # noqa: F401,E402
     parse_model_id,
 )
 from xenon.utils.llm_usage import (  # noqa: F401,E402
+    _USAGE_CALLBACKS,
     LLMResponse,
     LLMUsage,
     UsageTracker,
-    _USAGE_CALLBACKS,
     _acc_usage,
+    _emit_response,
     _emit_usage,
     _extract_usage,
     _prepare_cache_lane,
     _response_with_manifest,
     _set_cache_manifest,
+    _usage_tl,
     register_response_callback,
     register_usage_callback,
 )
-
 
 
 # B12: finish_reason=length（OpenAI 兼容）/ stop_reason=max_tokens（Anthropic）
@@ -1230,6 +1231,7 @@ def _stream_openai_compat(
     Phase 3: 支持检查点管理 - 周期性保存生成进度，网络中断时可从检查点恢复。
     """
     import time
+
     from xenon.utils.token_estimator import estimate_tokens
 
     url = f"{endpoint.base_url}/chat/completions"
@@ -1327,6 +1329,7 @@ def _stream_anthropic(
     Phase 3: 支持检查点管理 - 周期性保存生成进度，网络中断时可从检查点恢复。
     """
     import time
+
     from xenon.utils.token_estimator import estimate_tokens
 
     url = f"{endpoint.base_url}/v1/messages"

@@ -29,8 +29,7 @@ def test_python_dash_m_xenon_reports_version() -> None:
 
 def test_module_entry_imports_cli() -> None:
     """The entry module must expose the same callable as the console script."""
-    from xenon.main import cli as console_cli
-
     import xenon.__main__ as module_entry
+    from xenon.main import cli as console_cli
 
     assert module_entry.cli is console_cli

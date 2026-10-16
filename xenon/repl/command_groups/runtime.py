@@ -6,7 +6,6 @@ from typing import Any
 
 from xenon.repl.command_registry import command_handler, register_command
 
-
 register_command("/thinking", "切换推理过程显示（折叠/展开）", "/thinking [on|off]")
 
 

@@ -19,16 +19,38 @@ from xenon.repl.command_groups.session import (
 )
 from xenon.repl.commands import (
     _cmd_clear as legacy_clear,
+)
+from xenon.repl.commands import (
     _cmd_compact as legacy_compact,
+)
+from xenon.repl.commands import (
     _cmd_config as legacy_config,
+)
+from xenon.repl.commands import (
     _cmd_context as legacy_context,
+)
+from xenon.repl.commands import (
     _cmd_exit as legacy_exit,
+)
+from xenon.repl.commands import (
     _cmd_help as legacy_help,
+)
+from xenon.repl.commands import (
     _cmd_history as legacy_history,
+)
+from xenon.repl.commands import (
     _cmd_load as legacy_load,
+)
+from xenon.repl.commands import (
     _cmd_resume as legacy_resume,
+)
+from xenon.repl.commands import (
     _cmd_save as legacy_save,
+)
+from xenon.repl.commands import (
     _cmd_sessions as legacy_sessions,
+)
+from xenon.repl.commands import (
     _cmd_undo as legacy_undo,
 )
 

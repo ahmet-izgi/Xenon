@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import logging
 
-from xenon.engine.event_bus import EventBus, CallbackBusBridge, EVENT_TYPES
-
+from xenon.engine.event_bus import EVENT_TYPES, CallbackBusBridge, EventBus
 
 # --------------------------- subscribe / publish ---------------------------
 

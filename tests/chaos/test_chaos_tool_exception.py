@@ -97,8 +97,8 @@ def test_tool_failure_observes_through_react(monkeypatch):
     """端到端验证：tool 失败后，ReAct 引擎的 Observation 含可读错误。"""
     import xenon.engine.base as engine_base
     import xenon.utils.llm_client as llm_client
-    from xenon.engine.react_engine import ReActEngine
     from xenon.engine.callbacks import SilentCallback
+    from xenon.engine.react_engine import ReActEngine
 
     # LLM 第一次返回 tool_call，第二次看到失败 Observation 后返回 final_answer
     responses = [

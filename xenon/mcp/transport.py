@@ -16,7 +16,6 @@ import threading
 import time
 from typing import Any
 
-
 from xenon.utils.llm_client import _create_http_client
 
 logger = logging.getLogger(__name__)

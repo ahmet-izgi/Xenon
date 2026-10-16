@@ -22,7 +22,6 @@ import pytest
 from xenon.repl.context_manager import ContextManager
 from xenon.repl.status_bar import StatusBar
 
-
 # ── Problem 1: StatusBar.refresh() 回调机制 ──────────────────
 
 def test_statusbar_refresh_on_state_change():

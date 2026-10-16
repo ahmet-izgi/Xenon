@@ -5,8 +5,8 @@ from __future__ import annotations
 import io
 import os
 
-from rich.console import Console
 from prompt_toolkit.keys import Keys
+from rich.console import Console
 
 from xenon.repl.context_manager import ContextManager
 from xenon.repl.model_registry import ModelRegistry

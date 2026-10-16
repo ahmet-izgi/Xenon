@@ -15,6 +15,26 @@
 from __future__ import annotations
 
 import logging
+import re
+import time
+import uuid
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from pathlib import Path
+from typing import Any
+
+from xenon.engine.callbacks import mask_sensitive_params
+from xenon.engine.circuit_breaker import BreakerRegistry
+from xenon.engine.context import AgentContext
+from xenon.engine.evidence_gate import GateVerdict
+from xenon.engine.evidence_runtime import (
+    EventKind,
+    EvidenceLedger,
+    EvidenceSource,
+    LifecyclePhase,
+)
+from xenon.engine.tool_tracker import ToolExecutionTracker
 from xenon.nodes.param_validation import (  # noqa: E402,F401 - 兼容导出
     _chinese_ratio,
     validate_tool_params,
@@ -27,30 +47,10 @@ from xenon.nodes.tool_classify import (  # noqa: E402,F401 - 兼容导出
     execution_policy_denial,
     required_execution_level,
 )
-import re
-import time
-import uuid
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
-from enum import Enum
-from pathlib import Path
-from typing import Any
-
-from xenon.engine.circuit_breaker import BreakerRegistry
-from xenon.engine.context import AgentContext
-from xenon.engine.tool_tracker import ToolExecutionTracker
-from xenon.nodes.tool_node import ToolNode, _DYNAMIC_TOOLS
+from xenon.nodes.tool_node import _DYNAMIC_TOOLS, ToolNode
 from xenon.nodes.tool_registry import BUILTIN_TOOL_REGISTRY
 from xenon.nodes.tool_result import ToolResult, enrich_tool_result
 from xenon.nodes.tool_security import format_advisory_warning, model_visible_content
-from xenon.engine.callbacks import mask_sensitive_params
-from xenon.engine.evidence_gate import GateVerdict
-from xenon.engine.evidence_runtime import (
-    EvidenceLedger,
-    EvidenceSource,
-    EventKind,
-    LifecyclePhase,
-)
 from xenon.repl.system_config import get_config
 
 logger = logging.getLogger(__name__)

@@ -20,7 +20,7 @@ Xenon 原生工具集 — 惰性加载，热键触发。
     monitor.start()  # 首次热键才激活
 """
 
-from xenon.tools.vision_bridge import VisionBridge
 from xenon.tools.clipboard_monitor import ClipboardMonitor, read_clipboard_image
+from xenon.tools.vision_bridge import VisionBridge
 
 __all__ = ["VisionBridge", "ClipboardMonitor", "read_clipboard_image"]

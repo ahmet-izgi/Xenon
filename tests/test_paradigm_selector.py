@@ -3,8 +3,9 @@
 """
 
 import pytest
-from xenon.repl.paradigm_selector import ParadigmSelector, RoutingRule
+
 from xenon.repl.feature_extractor import TaskFeatures
+from xenon.repl.paradigm_selector import ParadigmSelector, RoutingRule
 
 
 class TestParadigmSelector:

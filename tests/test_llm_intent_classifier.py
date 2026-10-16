@@ -14,10 +14,10 @@ from __future__ import annotations
 import pytest
 
 from xenon.repl.llm_intent_classifier import (
-    LLMIntentClassifier,
-    ClassificationResult,
-    classify_intent_with_llm,
     INTENT_CATEGORIES,
+    ClassificationResult,
+    LLMIntentClassifier,
+    classify_intent_with_llm,
 )
 
 

@@ -18,10 +18,10 @@ import pytest
 import yaml
 
 from xenon.repl.system_config import (
-    load_config,
-    get_config,
-    reload_config,
     generate_default_config_file,
+    get_config,
+    load_config,
+    reload_config,
 )
 
 

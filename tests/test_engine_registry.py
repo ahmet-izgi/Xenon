@@ -12,8 +12,8 @@ import pytest
 
 from xenon.engine.registry import (
     ENGINE_REGISTRY,
-    EngineSpec,
     EngineRegistry,
+    EngineSpec,
     register_engine,
 )
 
@@ -156,9 +156,8 @@ class TestSingleSourceOfTruth:
     def test_swebench_engine_list_derived_from_registry(self):
         """swebench_xenon.ALL_ENGINES 现从注册表派生（issue #22 修复后）。"""
         try:
+            from evals.swebench_xenon import _NON_CODE_EDITING, CODE_EDITING_ENGINES
             from evals.swebench_xenon import ALL_ENGINES as SWE_ALL_ENGINES
-            from evals.swebench_xenon import CODE_EDITING_ENGINES
-            from evals.swebench_xenon import _NON_CODE_EDITING
         except ModuleNotFoundError as exc:
             if "datasets" in str(exc):
                 pytest.skip("requires datasets (SWE-bench harness)")

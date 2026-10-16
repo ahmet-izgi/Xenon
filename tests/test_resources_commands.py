@@ -14,12 +14,26 @@ from xenon.repl.command_groups.resources import (
 )
 from xenon.repl.commands import (
     _MCP_USAGE as legacy_mcp_usage,
+)
+from xenon.repl.commands import (
     _cmd_library as legacy_library,
+)
+from xenon.repl.commands import (
     _cmd_mcp as legacy_mcp,
+)
+from xenon.repl.commands import (
     _cmd_setup as legacy_setup,
+)
+from xenon.repl.commands import (
     _cmd_skill_discover as legacy_skill_discover,
+)
+from xenon.repl.commands import (
     _cmd_skill_install as legacy_skill_install,
+)
+from xenon.repl.commands import (
     _cmd_status as legacy_status,
+)
+from xenon.repl.commands import (
     _cmd_tools as legacy_tools,
 )
 

@@ -156,8 +156,8 @@ class TestPluginToolsAreVisibleToModel:
 
     def test_engine_tools_is_a_copy_not_the_global(self):
         """engine.tools 必须是副本，否则合并会污染全局 BUILTIN_TOOLS。"""
-        from xenon.engine.react_prompts import BUILTIN_TOOLS
         from xenon.engine.react_engine import ReActEngine
+        from xenon.engine.react_prompts import BUILTIN_TOOLS
 
         before = set(BUILTIN_TOOLS)
         engine = ReActEngine(model_priority=["deepseek/deepseek-v4-pro"])

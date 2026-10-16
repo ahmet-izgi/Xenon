@@ -14,7 +14,6 @@ import pytest
 from xenon.repl.context_manager import ContextManager
 from xenon.repl.model_registry import ModelRegistry
 
-
 # ── Mock 辅助函数 ──────────────────────────────────────────
 
 
@@ -559,8 +558,8 @@ class TestCommands:
         assert isinstance(result, str)
 
     def test_set_model_no_live_models_returns_clear_error(self, monkeypatch):
-        from xenon.repl.commands import dispatch_command
         import xenon.repl.provider_registry as provider_registry
+        from xenon.repl.commands import dispatch_command
         from xenon.repl.provider_registry import ProviderInfo
 
         reg = ModelRegistry()
@@ -871,8 +870,8 @@ class TestToolDetection:
         实时数据"指令，LLM 无工具可调时只给前言式回复（"我来帮你查询…"）。故 query
         意图直接判 True，绕过 direct 走 ReAct。
         """
-        from xenon.repl.repl import REPL
         from xenon.repl.prompt_optimizer import detect_intent
+        from xenon.repl.repl import REPL
 
         # 这些输入应被识别为 query 意图，且需要工具
         cases = [
@@ -912,8 +911,8 @@ class TestToolDetection:
     )
     def test_write_code_intent_defaults_to_chat_output(self, text):
         """代码生成不等于写盘授权；未指定副作用时应走 Direct。"""
-        from xenon.repl.repl import REPL
         from xenon.repl.prompt_optimizer import detect_intent
+        from xenon.repl.repl import REPL
 
         # 确认意图识别是 write_code
         assert detect_intent(text) == "write_code", f"意图识别失败: {text}"
@@ -934,8 +933,8 @@ class TestHandleChatEmptyInput:
     """
 
     def _build_repl(self):
-        from xenon.repl.repl import REPL
         from xenon.repl.model_registry import ModelRegistry
+        from xenon.repl.repl import REPL
 
         reg = ModelRegistry()
         reg.add_model("openai/gpt-4o", "gpt4")
@@ -1101,8 +1100,8 @@ class TestReactExceptionAssistantPlaceholder:
     """
 
     def _build_repl(self):
-        from xenon.repl.repl import REPL
         from xenon.repl.model_registry import ModelRegistry
+        from xenon.repl.repl import REPL
 
         reg = ModelRegistry()
         reg.add_model("openai/gpt-4o", "gpt4")
@@ -1189,8 +1188,8 @@ class TestFileClaimDenialRecursiveReact:
 
     def _build_repl_with_history(self, monkeypatch):
         """构造 REPL，预设 history 含 user + 占位 assistant（模拟 _run_direct 已 add user）。"""
-        from xenon.repl.repl import REPL
         from xenon.repl.model_registry import ModelRegistry
+        from xenon.repl.repl import REPL
 
         reg = ModelRegistry()
         reg.add_model("openai/gpt-4o", "gpt4")

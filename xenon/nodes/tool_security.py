@@ -13,7 +13,6 @@ import unicodedata
 from dataclasses import dataclass
 from typing import Any, Literal
 
-
 MAX_SCAN_CHARS = 32 * 1024
 MAX_SOURCE_REF_CHARS = 200
 MAX_ADVISORIES = 5

@@ -14,11 +14,11 @@ import io
 
 from rich.console import Console
 
+from xenon.repl.auto_router import AutoRouter
 from xenon.repl.context_manager import ContextManager
+from xenon.repl.model_pool import ModelPool
 from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.status_bar import StatusBar
-from xenon.repl.model_pool import ModelPool
-from xenon.repl.auto_router import AutoRouter
 
 
 def _make_status_bar(ctx_mgr=None, registry=None, usage_tracker=None):

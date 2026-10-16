@@ -9,7 +9,11 @@ from rich.console import Console
 
 from xenon.repl.command_groups.cache import (
     _cmd_cache as _group_cmd_cache,
+)
+from xenon.repl.command_groups.cache import (
     _cmd_cost as _group_cmd_cost,
+)
+from xenon.repl.command_groups.cache import (
     _cmd_fix_cache as _group_cmd_fix_cache,
 )
 from xenon.repl.commands import COMMANDS, _cmd_cache, _cmd_cost, _cmd_fix_cache
@@ -17,8 +21,8 @@ from xenon.repl.context_manager import ContextManager
 from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.status_bar import StatusBar
 from xenon.utils.cache_telemetry import (
-    CacheEventStore,
     MANIFEST_RESPONSE_KEY,
+    CacheEventStore,
     build_prompt_manifest,
 )
 from xenon.utils.deepseek_cache import CacheTracker

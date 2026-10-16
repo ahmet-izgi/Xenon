@@ -6,8 +6,8 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
-from xenon.repl.prompt_lanes import PromptLaneRegistry, SessionEventLog
 from xenon.repl.context_manager import ContextManager
+from xenon.repl.prompt_lanes import PromptLaneRegistry, SessionEventLog
 from xenon.utils import llm_client
 from xenon.utils.token_estimate import estimate_text_tokens
 

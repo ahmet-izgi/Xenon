@@ -7,7 +7,6 @@ import threading
 from dataclasses import dataclass, field
 from typing import Any
 
-
 from xenon.utils.cache_telemetry import MANIFEST_RESPONSE_KEY, build_prompt_manifest
 
 logger = logging.getLogger(__name__)

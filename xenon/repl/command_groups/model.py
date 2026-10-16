@@ -50,8 +50,8 @@ register_command(
 def _cmd_set_model(
     *, args: str, registry: ModelRegistry, session_state: dict, **kwargs: Any
 ) -> str:
-    from rich.table import Table as _Table
     from rich.prompt import IntPrompt as _IntPrompt
+    from rich.table import Table as _Table
 
     parts = args.split() if args.strip() else []
 
@@ -66,8 +66,8 @@ def _cmd_set_model(
                 extra[k] = v
         # A11: api_key 不进 argv — 命令行明文 key 已忽略，改走掩码输入（防 ps/历史泄露）
         if "api_key" in extra:
-            from rich.prompt import Prompt as _Prompt
             from rich.console import Console as _Console
+            from rich.prompt import Prompt as _Prompt
 
             console = kwargs.get("console") or _Console()
             if extra.get("api_key"):
@@ -500,9 +500,9 @@ register_command("/model", "交互式切换模型", "/model")
 
 @command_handler("/model")
 def _cmd_model(*, session_state: dict, registry: ModelRegistry, **kwargs: Any) -> str:
-    from rich.table import Table as _Table
-    from rich.prompt import IntPrompt as _IntPrompt
     from rich.console import Console as _Console
+    from rich.prompt import IntPrompt as _IntPrompt
+    from rich.table import Table as _Table
 
     models = registry.list_models()
     if not models:
@@ -553,7 +553,7 @@ register_command("/provider", "查看已配置的厂商和可用模型", "/provi
 
 @command_handler("/provider")
 def _cmd_provider(**kwargs: Any) -> str:
-    from xenon.repl.provider_registry import get_configured_providers, PROVIDERS
+    from xenon.repl.provider_registry import PROVIDERS, get_configured_providers
 
     # 懒加载契约：同 /model，这是用户要看厂商全貌的入口，按需探测并回填。
     _repl = kwargs.get("repl")

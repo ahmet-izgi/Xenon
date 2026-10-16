@@ -15,7 +15,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-
 from xenon.engine.context import AgentContext
 from xenon.engine.tool_gate import (
     ParamValidationLevel,
@@ -23,7 +22,7 @@ from xenon.engine.tool_gate import (
     ToolGateConfig,
 )
 from xenon.engine.tool_tracker import ToolExecutionTracker
-from xenon.nodes.tool_executor import ToolExecutor, ToolExecutionState
+from xenon.nodes.tool_executor import ToolExecutionState, ToolExecutor
 
 
 @dataclass

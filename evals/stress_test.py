@@ -13,7 +13,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from xenon.repl.context_manager import ContextManager
-from xenon.repl.context_strategies import TieredStrategySelector, SpaceBudget
+from xenon.repl.context_strategies import SpaceBudget, TieredStrategySelector
 from xenon.utils.llm_client import chat_completion
 
 

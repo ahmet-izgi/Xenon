@@ -13,7 +13,11 @@ from __future__ import annotations
 
 import pytest
 
-from xenon.repl.execution_policy import ExecutionLevel, ExecutionPolicy, extract_execution_signals
+from xenon.repl.execution_policy import (
+    ExecutionLevel,
+    ExecutionPolicy,
+    extract_execution_signals,
+)
 from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.repl import REPL
 from xenon.repl.turn_contract import (

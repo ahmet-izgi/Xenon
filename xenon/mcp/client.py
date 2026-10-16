@@ -15,7 +15,7 @@ import logging
 from typing import Any
 
 from xenon import __version__
-from xenon.mcp.transport import MCPTransport, StdioTransport, SSETransport
+from xenon.mcp.transport import MCPTransport, SSETransport, StdioTransport
 
 logger = logging.getLogger(__name__)
 

@@ -236,14 +236,15 @@ class TestEngineRunInputValidation:
     def test_all_engine_runs_validate(self):
         """全部 6 个引擎 run() 首行都应调用统一校验。"""
         import inspect
-        from xenon.engine.react_engine import ReActEngine
-        from xenon.engine.plan_execute_engine import PlanExecuteEngine
-        from xenon.engine.reflection_engine import ReflectionEngine
+
         from xenon.engine.combined_engines import (
             PlanReactEngine,
             PlanReflectionEngine,
             ReactReflectionEngine,
         )
+        from xenon.engine.plan_execute_engine import PlanExecuteEngine
+        from xenon.engine.react_engine import ReActEngine
+        from xenon.engine.reflection_engine import ReflectionEngine
 
         for cls in (
             ReActEngine,

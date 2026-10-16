@@ -12,7 +12,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 from xenon.engine.context import AgentContext
-from xenon.nodes.network_security import SSRFRedirectError, SecurityError
+from xenon.nodes.network_security import SecurityError, SSRFRedirectError
 from xenon.utils.github_auth import github_auth_headers
 from xenon.utils.github_reference import parse_github_reference
 

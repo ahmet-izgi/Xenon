@@ -4,11 +4,11 @@ Memory Store 跨会话记忆测试。
 
 from __future__ import annotations
 
-import tempfile
 import stat
+import tempfile
 from pathlib import Path
 
-from xenon.repl.memory import MemoryStore, Memory
+from xenon.repl.memory import Memory, MemoryStore
 
 
 class TestMemoryStore:

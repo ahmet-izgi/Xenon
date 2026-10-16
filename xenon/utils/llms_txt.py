@@ -6,7 +6,6 @@ import re
 from dataclasses import dataclass, field
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
-
 _LINK_RE = re.compile(r"^\s*[-*+]\s+\[([^\]]+)]\(([^)]+)\)(?:\s*:\s*(.*))?\s*$")
 _TOKEN_RE = re.compile(r"[a-z0-9_.-]+|[\u3400-\u9fff]", re.IGNORECASE)
 _KNOWN_FILES = frozenset(

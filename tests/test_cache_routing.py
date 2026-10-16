@@ -5,9 +5,9 @@ from __future__ import annotations
 import json
 
 from xenon.repl.auto_router import AutoRouter
+from xenon.repl.context_manager import ContextManager
 from xenon.repl.difficulty_estimator import TaskProfile
 from xenon.repl.model_pool import ModelPool
-from xenon.repl.context_manager import ContextManager
 from xenon.utils.cache_telemetry import (
     MANIFEST_RESPONSE_KEY,
     CacheEventStore,

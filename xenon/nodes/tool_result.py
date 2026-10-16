@@ -19,7 +19,6 @@ from xenon.nodes.tool_security import (
     provenance_for_tool,
 )
 
-
 TOOL_RESULT_SCHEMA_VERSION = "1.0"
 
 

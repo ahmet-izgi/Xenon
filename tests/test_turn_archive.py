@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-
 from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.repl import REPL
 from xenon.session.archive import build_turn_archives, render_archive_block

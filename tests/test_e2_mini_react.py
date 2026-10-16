@@ -20,7 +20,6 @@ from __future__ import annotations
 
 import json
 
-
 from xenon.engine.context import AgentContext
 from xenon.engine.plan_execute_engine import PlanExecuteEngine
 from xenon.engine.tool_tracker import ToolExecutionTracker

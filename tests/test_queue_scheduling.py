@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from xenon.repl.model_pool import ModelPool
 from xenon.repl.difficulty_estimator import DifficultyEstimator, TaskProfile
+from xenon.repl.model_pool import ModelPool
 
 
 class TestTierAssignment:

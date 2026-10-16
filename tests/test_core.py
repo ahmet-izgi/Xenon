@@ -9,11 +9,10 @@ from __future__ import annotations
 import pytest
 
 from xenon.engine.context import AgentContext
+from xenon.engine.scheduler import DAGScheduler
 from xenon.nodes.base import BaseNode
 from xenon.nodes.router_node import RouterNode
 from xenon.nodes.tool_node import ToolNode
-from xenon.engine.scheduler import DAGScheduler
-
 
 # ── AgentContext 测试 ─────────────────────────────────────
 

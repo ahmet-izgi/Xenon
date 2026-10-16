@@ -256,8 +256,9 @@ def _interactive_session_picker() -> str | None:
     if not sys.stdin.isatty():
         return None  # 管道/CI/重定向：不阻塞、不询问
 
-    from xenon.repl.session import get_session_age, list_sessions
     from rich.prompt import IntPrompt
+
+    from xenon.repl.session import get_session_age, list_sessions
 
     sessions = list_sessions()
     if not sessions:
@@ -395,8 +396,8 @@ def _cmd_chat(args: argparse.Namespace) -> None:
 def _cmd_models_import(args: argparse.Namespace) -> None:
     """P1-A: 非交互批量注册模型(脚本/CI 友好)。"""
     from xenon.repl.batch_register import batch_register
-    from xenon.repl.model_registry import ModelRegistry
     from xenon.repl.model_pool import ModelPool
+    from xenon.repl.model_registry import ModelRegistry
 
     file = getattr(args, "file", None)
     if not file:

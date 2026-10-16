@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from xenon.engine.hollow_detector import (
-    HollowDetector,
     _COMPLETION_PATTERNS,
     _HOLLOW_PATTERNS,
+    HollowDetector,
 )
 
 

@@ -35,7 +35,6 @@ from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.repl import REPL
 from xenon.repl.turn_contract import contract_for_level
 
-
 FIXTURES = Path(__file__).parent / "fixtures" / "prompt_injection_cases.json"
 
 

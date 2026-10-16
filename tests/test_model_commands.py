@@ -18,16 +18,38 @@ from xenon.repl.command_groups.model import (
 )
 from xenon.repl.commands import (
     _cmd_import_models as legacy_import_models,
+)
+from xenon.repl.commands import (
     _cmd_mode as legacy_mode,
+)
+from xenon.repl.commands import (
     _cmd_model as legacy_model,
+)
+from xenon.repl.commands import (
     _cmd_models as legacy_models,
+)
+from xenon.repl.commands import (
     _cmd_pool as legacy_pool,
+)
+from xenon.repl.commands import (
     _cmd_provider as legacy_provider,
+)
+from xenon.repl.commands import (
     _cmd_reload_models as legacy_reload_models,
+)
+from xenon.repl.commands import (
     _cmd_remove_model as legacy_remove_model,
+)
+from xenon.repl.commands import (
     _cmd_set_model as legacy_set_model,
+)
+from xenon.repl.commands import (
     _cmd_set_profile as legacy_set_profile,
+)
+from xenon.repl.commands import (
     _cmd_set_role as legacy_set_role,
+)
+from xenon.repl.commands import (
     _model_hint_local as legacy_model_hint_local,
 )
 

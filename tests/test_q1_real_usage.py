@@ -14,6 +14,7 @@ Q1 第一步（chat_completion 经 usage 回调发出 LLMUsage）已落地于 te
 from __future__ import annotations
 
 import pytest
+
 import xenon.utils.llm_client as lc
 from xenon.repl.context_manager import ContextManager
 from xenon.utils.llm_client import (

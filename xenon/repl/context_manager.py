@@ -892,8 +892,8 @@ class ContextManager:
             return list(older)  # 太少，不分块
 
         try:
-            from xenon.repl.semantic_chunker import SemanticChunker
             from xenon.repl.context_strategies import ToolOutputClassifier
+            from xenon.repl.semantic_chunker import SemanticChunker
 
             chunker = SemanticChunker()
             chunks = chunker.group(older)

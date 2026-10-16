@@ -4,13 +4,12 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.setup_wizard import (
     _clean_api_key,
-    _test_key_connectivity,
     _purge_provider_models,
+    _test_key_connectivity,
 )
-from xenon.repl.model_registry import ModelRegistry
-
 
 # --------------------------- _clean_api_key export 前缀 ---------------------------
 

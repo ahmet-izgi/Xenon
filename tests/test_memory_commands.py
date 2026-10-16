@@ -8,6 +8,8 @@ from xenon.repl.command_groups.memory_cmd import (
 )
 from xenon.repl.commands import (
     _cmd_memory as legacy_memory,
+)
+from xenon.repl.commands import (
     _cmd_memory_v2 as legacy_memory_v2,
 )
 

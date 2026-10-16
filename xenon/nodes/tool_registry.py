@@ -43,7 +43,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Callable, Literal
 
-
 ToolHandler = Callable[[Any, Any], dict[str, Any]]
 ToolRisk = Literal["INFO", "WRITE", "SENSITIVE"]
 _VALID_TOOL_RISKS = frozenset({"INFO", "WRITE", "SENSITIVE"})

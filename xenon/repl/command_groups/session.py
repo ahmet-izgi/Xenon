@@ -20,8 +20,8 @@ from xenon.repl.command_registry import (
 )
 
 if TYPE_CHECKING:
-    from xenon.repl.model_registry import ModelRegistry
     from xenon.repl.context_manager import ContextManager
+    from xenon.repl.model_registry import ModelRegistry
 
 
 # /exit /quit /bye ─────────────────────────────────────────
@@ -177,8 +177,8 @@ def _cmd_load(
     registry: ModelRegistry,
     **kwargs: Any,
 ) -> str:
-    from xenon.repl.session import load_session
     from xenon.engine.context import AgentContext
+    from xenon.repl.session import load_session
 
     name = args.strip()
     if not name:
@@ -286,10 +286,10 @@ register_command("/resume", "列出 / 恢复保存的会话", "/resume [序号�
 def _cmd_resume(*, args: str, session_state: dict, **kwargs: Any) -> str:
     """断点恢复：列出所有会话，或按序号/名称加载指定会话。"""
     from xenon.repl.session import (
+        _load_and_migrate,
+        get_session_age,
         list_sessions,
         load_session,
-        get_session_age,
-        _load_and_migrate,
         touch_session,
     )
 
@@ -304,8 +304,8 @@ def _cmd_resume(*, args: str, session_state: dict, **kwargs: Any) -> str:
         if not sessions:
             return "没有已保存的会话。使用 /save <名称> 手动保存，或退出时自动保存。"
 
-        from rich.table import Table
         from rich.console import Console as RichConsole
+        from rich.table import Table
 
         table = Table(
             title="已保存的会话 · 输入 /resume <序号> 恢复",

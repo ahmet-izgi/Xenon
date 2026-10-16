@@ -5,12 +5,11 @@ from __future__ import annotations
 import copy
 
 from xenon.repl.context_manager import (
+    _CJK_RE,
     ContextManager,
     ConversationTurn,
     _estimate_tokens,
-    _CJK_RE,
 )
-
 
 # --------------------------- estimate_tokens 基础（向后兼容） ---------------------------
 

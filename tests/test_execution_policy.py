@@ -6,8 +6,8 @@ import ast
 
 import pytest
 
-from xenon.engine.react_engine import ReActEngine
 from xenon.engine.context import AgentContext
+from xenon.engine.react_engine import ReActEngine
 from xenon.engine.tool_tracker import ToolExecutionTracker
 from xenon.nodes.tool_executor import ToolExecutor, execution_policy_denial
 from xenon.repl.code_response import validate_code_response
@@ -18,9 +18,9 @@ from xenon.repl.execution_policy import (
     classify_execution_policy,
     strip_execution_boundary,
 )
+from xenon.repl.llm_intent_classifier import ClassificationResult
 from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.prompt_optimizer import detect_intent
-from xenon.repl.llm_intent_classifier import ClassificationResult
 from xenon.repl.repl import REPL
 from xenon.repl.turn_contract import build_turn_contract
 

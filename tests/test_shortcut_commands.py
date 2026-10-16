@@ -12,10 +12,20 @@ from xenon.repl.command_groups.shortcut import (
 )
 from xenon.repl.commands import (
     _cmd_shortcut as legacy_shortcut,
+)
+from xenon.repl.commands import (
     _generate_shortcut_steps as legacy_generate,
+)
+from xenon.repl.commands import (
     _parse_shortcut_steps as legacy_parse,
+)
+from xenon.repl.commands import (
     _shortcut_auto_generate as legacy_auto_gen,
+)
+from xenon.repl.commands import (
     _shortcut_create_interactive as legacy_create,
+)
+from xenon.repl.commands import (
     _shortcut_manual_create as legacy_manual,
 )
 

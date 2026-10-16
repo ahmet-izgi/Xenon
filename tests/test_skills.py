@@ -232,6 +232,8 @@ class TestSkillManager:
     def test_skill_group_preserves_legacy_command_exports(self):
         from xenon.repl.command_groups.skill import (
             _cmd_skill as grouped_cmd_skill,
+        )
+        from xenon.repl.command_groups.skill import (
             _extract_skill_name as grouped_extract_skill_name,
         )
         from xenon.repl.commands import _cmd_skill, _extract_skill_name
@@ -274,7 +276,8 @@ class TestSkillManager:
         """测试动态注册 skill handler。"""
         import tempfile
         from pathlib import Path
-        from xenon.repl.commands import _register_skill_handler, _HANDLERS
+
+        from xenon.repl.commands import _HANDLERS, _register_skill_handler
 
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = SkillManager(Path(tmpdir))

@@ -311,8 +311,8 @@ class TestReActIntegration:
 
     def test_native_converge_phase_removes_tool_schema(self, monkeypatch):
         """Convergence must make a final-only call, not invite more tool calls."""
-        from xenon.repl.execution_policy import ExecutionLevel
         from xenon.nodes.tool_executor import ToolExecuteResult
+        from xenon.repl.execution_policy import ExecutionLevel
 
         eng = ReActEngine(["m1"], max_iterations=4, native_fc=True)
         seen_tools = []

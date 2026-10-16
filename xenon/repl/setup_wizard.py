@@ -12,19 +12,19 @@ import sys
 from typing import TYPE_CHECKING
 
 from rich.console import Console
-from rich.prompt import Prompt, IntPrompt, Confirm
+from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.table import Table
 
 from xenon.repl.provider_registry import (
+    MODEL_FETCH_ERRORS,
     PROVIDERS,
+    fetch_provider_models,
+    get_configured_providers,
     list_providers,
     load_credentials,
-    set_provider_key,
-    remove_provider_key,
-    get_configured_providers,
-    fetch_provider_models,
-    MODEL_FETCH_ERRORS,
     register_custom_provider,
+    remove_provider_key,
+    set_provider_key,
 )
 from xenon.repl.system_config import get_config
 

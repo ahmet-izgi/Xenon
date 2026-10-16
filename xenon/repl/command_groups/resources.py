@@ -13,8 +13,8 @@ from xenon.repl.command_groups.common import confirm_action
 from xenon.repl.command_registry import command_handler, register_command
 
 if TYPE_CHECKING:
-    from xenon.repl.model_registry import ModelRegistry
     from xenon.repl.context_manager import ContextManager
+    from xenon.repl.model_registry import ModelRegistry
 
 
 # /mcp ──────────────────────────────────────────────────

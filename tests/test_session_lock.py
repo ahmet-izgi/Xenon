@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import time
 
-
 from xenon.repl.auto_router import AutoRouter
 from xenon.repl.difficulty_estimator import TaskProfile
-from xenon.repl.model_pool import ModelPool, FAILURE_THRESHOLD
+from xenon.repl.model_pool import FAILURE_THRESHOLD, ModelPool
 from xenon.repl.session_lock import SessionLock
 
 

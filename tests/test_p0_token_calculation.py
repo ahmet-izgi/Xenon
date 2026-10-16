@@ -14,7 +14,6 @@ from __future__ import annotations
 import logging
 from unittest.mock import MagicMock, patch
 
-
 from xenon.repl.context_manager import ContextManager, _estimate_tokens
 
 

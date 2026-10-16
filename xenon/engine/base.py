@@ -247,9 +247,9 @@ class BaseEngine(ABC):
         first), reuse its ledger so task intake and engine events stay in one chain.
         """
         from xenon.engine.evidence_runtime import (
+            EventKind,
             EvidenceLedger,
             EvidenceSource,
-            EventKind,
             LifecyclePhase,
         )
 
@@ -285,9 +285,9 @@ class BaseEngine(ABC):
     ) -> Any:
         """Build the delivery EvidencePack only after final deterministic gates pass."""
         from xenon.engine.evidence_runtime import (
+            EventKind,
             EvidencePack,
             EvidenceSource,
-            EventKind,
             LifecyclePhase,
         )
 
@@ -381,8 +381,7 @@ class BaseEngine(ABC):
         各引擎 ``run()`` 开头调用一次，使本次运行内的所有 LLM 调用日志带同一
         ``[run_id]`` 前缀；``_call_llm`` 内每次调用再生成 ``call_id`` 细分。
         """
-        from xenon.engine.trace import new_run_id, prefix
-        from xenon.engine.trace import set_trace_run_id
+        from xenon.engine.trace import new_run_id, prefix, set_trace_run_id
 
         self.run_id = new_run_id()
         set_trace_run_id(self.run_id)

@@ -118,6 +118,7 @@ class ReplCommandAgent:
 
     def run_task(self, task: dict[str, Any]) -> dict[str, Any]:
         from unittest.mock import patch
+
         from xenon.repl.commands import dispatch_command
         from xenon.repl.repl import REPL
         from xenon.utils.deepseek_cache import CacheTracker

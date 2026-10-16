@@ -4,9 +4,8 @@ Code Index 和 AST Analyzer 测试。
 
 from __future__ import annotations
 
-
-from xenon.utils.code_index import CodeIndex
 from xenon.utils.ast_analyzer import ASTAnalyzer
+from xenon.utils.code_index import CodeIndex
 from xenon.utils.refactor import RefactorEngine
 
 

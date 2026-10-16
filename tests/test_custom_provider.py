@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 from unittest.mock import patch
+
 from xenon.repl.provider_registry import (
+    PROVIDERS,
+    _load_custom_providers,
     register_custom_provider,
     remove_custom_provider,
-    _load_custom_providers,
-    PROVIDERS,
 )
 
 

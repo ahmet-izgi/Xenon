@@ -12,12 +12,12 @@ from pathlib import Path
 
 import yaml
 
-from xenon.integration_cli import run_integration_cli
 from xenon.engine.context import AgentContext
+from xenon.integration_cli import run_integration_cli
 from xenon.mcp.client import MCPClient
 from xenon.mcp.registry import MCPRegistry
-from xenon.repl.repl import REPL
 from xenon.repl.provider_registry import load_mcp_servers, save_mcp_server
+from xenon.repl.repl import REPL
 
 
 def _write_skill(root: Path, name: str = "sample") -> Path:

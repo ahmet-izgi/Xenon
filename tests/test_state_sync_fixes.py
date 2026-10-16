@@ -1,10 +1,11 @@
 """测试模式1的6个状态同步问题修复。"""
 
-from xenon.repl.context_manager import ContextManager
+from rich.console import Console
+
 from xenon.repl.auto_router import AutoRouter
+from xenon.repl.context_manager import ContextManager
 from xenon.repl.model_pool import ModelPool
 from xenon.repl.status_bar import StatusBar
-from rich.console import Console
 
 
 class TestStateSyncFixes:

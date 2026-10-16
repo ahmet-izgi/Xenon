@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import time
 
-
 from xenon.utils.response_adapter import parse_react
 
 
@@ -63,8 +62,8 @@ class TestEngineWithHugeObservation:
         """tool 返回 50KB 输出 → 引擎 observation 截断（_near_context_window）防止 OOM。"""
         import xenon.engine.base as engine_base
         import xenon.utils.llm_client as llm_client
-        from xenon.engine.react_engine import ReActEngine
         from xenon.engine.callbacks import SilentCallback
+        from xenon.engine.react_engine import ReActEngine
         from xenon.nodes import tool_executor as te_mod
 
         # tool 返回 50KB 内容

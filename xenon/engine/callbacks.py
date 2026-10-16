@@ -310,9 +310,9 @@ class ThinkingPanel:
 
     def __rich_console__(self, console, options):
         """Rich 协议：渲染思考面板 — 摘要行 + 折叠详情。"""
-        from rich.text import Text
-        from rich.panel import Panel
         from rich.console import Group
+        from rich.panel import Panel
+        from rich.text import Text
 
         if self.is_empty:
             return

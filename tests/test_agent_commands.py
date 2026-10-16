@@ -10,8 +10,14 @@ from xenon.repl.command_groups.agent import (
 )
 from xenon.repl.commands import (
     _cmd_ask as legacy_ask,
+)
+from xenon.repl.commands import (
     _cmd_code as legacy_code,
+)
+from xenon.repl.commands import (
     _cmd_run as legacy_run,
+)
+from xenon.repl.commands import (
     _cmd_sub_agent as legacy_sub_agent,
 )
 
@@ -24,8 +30,8 @@ def test_agent_group_preserves_legacy_command_exports():
 
 
 def test_ask_needs_model():
-    from xenon.repl.model_registry import ModelRegistry
     from xenon.repl.context_manager import ContextManager
+    from xenon.repl.model_registry import ModelRegistry
 
     reg = ModelRegistry()
     ctx = ContextManager()
@@ -69,8 +75,8 @@ def test_ask_uses_model_output_budget_and_endpoint(monkeypatch):
 
 
 def test_code_needs_task():
-    from xenon.repl.model_registry import ModelRegistry
     from xenon.repl.context_manager import ContextManager
+    from xenon.repl.model_registry import ModelRegistry
 
     reg = ModelRegistry()
     ctx = ContextManager()

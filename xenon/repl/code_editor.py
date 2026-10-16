@@ -97,8 +97,8 @@ class CodeEditor:
 
         if confirm and diff:
             from rich.console import Console
-            from rich.syntax import Syntax
             from rich.prompt import Confirm as RichConfirm
+            from rich.syntax import Syntax
 
             console = Console()
             diff_text = "".join(diff)

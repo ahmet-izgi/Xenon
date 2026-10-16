@@ -12,8 +12,8 @@ from xenon.repl.command_groups.common import confirm_action
 from xenon.repl.command_registry import command_handler, register_command
 
 if TYPE_CHECKING:
-    from xenon.repl.model_registry import ModelRegistry
     from xenon.repl.context_manager import ContextManager
+    from xenon.repl.model_registry import ModelRegistry
 
 
 # /run ─────────────────────────────────────────────────────
@@ -153,6 +153,7 @@ def _cmd_code(
     import subprocess
     import sys
     from pathlib import Path
+
     from xenon.utils.llm_client import chat_completion
 
     if not args:
@@ -306,8 +307,8 @@ def _cmd_sub_agent(*, args: str, session_state: dict, repl=None, **kwargs: Any) 
       /sub-agent <task> --timeout 30            # 30 秒超时
       /sub-agent --parallel taskA|taskB|taskC   # 并行 3 个子任务
     """
-    from xenon.engine.react_engine import ReActEngine
     from xenon.engine.context import AgentContext
+    from xenon.engine.react_engine import ReActEngine
 
     if not args or not args.strip():
         return (

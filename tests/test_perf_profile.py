@@ -12,8 +12,8 @@
 import httpx
 import pytest
 
-from xenon.repl.model_pool import ModelPool
 from xenon.repl.difficulty_estimator import TaskProfile
+from xenon.repl.model_pool import ModelPool
 
 
 def _http_error(status: int, headers=None) -> httpx.HTTPStatusError:
@@ -211,8 +211,8 @@ class TestExtractRetryAfter:
 class TestCallLLMRetry:
     def test_retries_on_429_then_succeeds(self, monkeypatch):
         import xenon.engine.base as base
-        from xenon.engine.plan_execute_engine import PlanExecuteEngine
         from xenon.engine.callbacks import EngineCallback
+        from xenon.engine.plan_execute_engine import PlanExecuteEngine
 
         calls = {"n": 0}
         req = httpx.Request("POST", "http://x")
@@ -233,8 +233,8 @@ class TestCallLLMRetry:
     def test_no_retry_on_400(self, monkeypatch):
         """400 是终端错误,立即上抛,不触发退避重试。"""
         import xenon.engine.base as base
-        from xenon.engine.plan_execute_engine import PlanExecuteEngine
         from xenon.engine.callbacks import EngineCallback
+        from xenon.engine.plan_execute_engine import PlanExecuteEngine
 
         req = httpx.Request("POST", "http://x")
 

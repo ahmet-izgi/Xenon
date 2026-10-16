@@ -9,8 +9,7 @@ import os
 import tempfile
 from pathlib import Path
 
-from xenon.engine.scout import DirectoryScout, DEFAULT_EXCLUDE
-
+from xenon.engine.scout import DEFAULT_EXCLUDE, DirectoryScout
 
 # --------------------------- scan() ---------------------------
 

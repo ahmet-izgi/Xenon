@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from xenon.repl.commands import _confirm, dispatch_command, ExitSignal, _HANDLERS
+from xenon.repl.commands import _HANDLERS, ExitSignal, _confirm, dispatch_command
 from xenon.repl.context_manager import ContextManager
 from xenon.repl.model_registry import ModelRegistry
-
 
 # --------------------------- _confirm() ---------------------------
 
@@ -112,9 +111,9 @@ def test_clear_confirmed_clears_history():
 def test_clear_cancelled_keeps_history(monkeypatch):
     """用户选'否' → 取消，历史保留。"""
     monkeypatch.delenv("XENON_ASSUME_YES", raising=False)
-    import xenon.repl.commands as cmds
     import xenon.repl.command_groups.common as common
     import xenon.repl.command_groups.session as session
+    import xenon.repl.commands as cmds
 
     monkeypatch.setattr(cmds, "_confirm", lambda *a, **kw: False)
     monkeypatch.setattr(common, "confirm_action", lambda *a, **kw: False)

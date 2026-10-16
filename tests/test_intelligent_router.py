@@ -3,8 +3,9 @@
 """
 
 import pytest
-from xenon.repl.intelligent_router import IntelligentRouter
+
 from xenon.repl.context_manager import ContextManager
+from xenon.repl.intelligent_router import IntelligentRouter
 
 
 class TestIntelligentRouter:

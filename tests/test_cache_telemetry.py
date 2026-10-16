@@ -9,6 +9,8 @@ import sys
 
 import pytest
 
+from xenon.engine.base import BaseEngine
+from xenon.repl.context_manager import ContextManager
 from xenon.utils.cache_telemetry import (
     MANIFEST_RESPONSE_KEY,
     CacheEventStore,
@@ -16,8 +18,6 @@ from xenon.utils.cache_telemetry import (
     build_prompt_manifest,
 )
 from xenon.utils.deepseek_cache import CacheTracker
-from xenon.engine.base import BaseEngine
-from xenon.repl.context_manager import ContextManager
 
 
 def _messages(question: str) -> list[dict[str, str]]:

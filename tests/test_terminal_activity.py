@@ -6,8 +6,8 @@ import io
 import threading
 import time
 
-from xenon.repl.repl import REPL
 from xenon.engine.callbacks import ConsoleCallback
+from xenon.repl.repl import REPL
 from xenon.repl.terminal_activity import (
     TerminalActivityIndicator,
     TerminalActivityState,

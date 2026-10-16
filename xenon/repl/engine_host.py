@@ -16,10 +16,11 @@ from typing import Any
 
 from rich.text import Text
 
-from xenon.engine.registry import ENGINE_REGISTRY
-from xenon.engine.registry import EngineSpec
+from xenon.engine.registry import ENGINE_REGISTRY, EngineSpec
 from xenon.repl.turn_helpers import (
     retry_budget_for as _retry_budget_for,
+)
+from xenon.repl.turn_helpers import (
     verify_retries_limit as _verify_retries_limit,
 )
 

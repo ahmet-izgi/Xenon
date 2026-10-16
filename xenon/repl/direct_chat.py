@@ -342,9 +342,10 @@ class DirectChatMixin:
 
     def _stream_response(self, model_id: str, messages: list[dict[str, str]]) -> str:
         """Collect a streamed reply for validation before rendering it."""
-        from xenon.utils.llm_client import chat_completion_stream
         from rich.live import Live
         from rich.spinner import Spinner
+
+        from xenon.utils.llm_client import chat_completion_stream
 
         full_response = []
         model_config = self.registry.get_model_by_id(model_id)

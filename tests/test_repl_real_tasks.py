@@ -46,7 +46,6 @@ from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.prompt_optimizer import detect_intent
 from xenon.repl.repl import REPL
 
-
 # ── Mock 辅助函数 ──────────────────────────────────────────
 
 

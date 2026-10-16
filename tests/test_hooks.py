@@ -8,10 +8,10 @@ from pathlib import Path
 
 import pytest
 
+from xenon.engine.context import AgentContext
 from xenon.hooks.runner import HookRunner
 from xenon.nodes import tool_executor as te_mod
 from xenon.nodes.tool_executor import ToolExecutor
-from xenon.engine.context import AgentContext
 
 
 @pytest.fixture(autouse=True)

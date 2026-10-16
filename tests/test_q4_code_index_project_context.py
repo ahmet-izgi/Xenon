@@ -15,10 +15,8 @@ import json
 import os
 import time
 
-
 from xenon.repl.project_context import ProjectContext, _is_excluded_dir
 from xenon.utils.code_index import CodeIndex
-
 
 # ── §8.21.3：fnmatch glob 排除 ───────────────────────────────
 

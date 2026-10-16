@@ -6,11 +6,10 @@
 
 from __future__ import annotations
 
-
 import xenon.engine.base as engine_base
 import xenon.utils.llm_client as llm_client
-from xenon.engine.react_engine import ReActEngine
 from xenon.engine.callbacks import SilentCallback
+from xenon.engine.react_engine import ReActEngine
 
 
 def test_finish_without_tool_when_tools_required(monkeypatch):

@@ -12,10 +12,9 @@ v0.3.0 修复后：
 
 from __future__ import annotations
 
-
-from xenon.repl.repl import REPL
-from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.context_manager import ContextManager
+from xenon.repl.model_registry import ModelRegistry
+from xenon.repl.repl import REPL
 
 
 class TestCtrlCPendingExit:

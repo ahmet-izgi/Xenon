@@ -20,8 +20,8 @@ import time
 from dataclasses import dataclass
 from typing import Any
 
-from xenon.utils.llm_client import chat_completion
 from xenon.repl.system_config import get_config
+from xenon.utils.llm_client import chat_completion
 
 logger = logging.getLogger(__name__)
 

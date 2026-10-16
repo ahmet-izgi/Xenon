@@ -15,6 +15,7 @@ from rich.padding import Padding
 from rich.panel import Panel
 from rich.text import Text
 
+
 # 延迟导入 console：与 repl.py 共用同一实例（测试 monkeypatch 依赖同一对象）。
 def _console() -> Console:
     from xenon.repl.repl import console

@@ -3,8 +3,9 @@
 """
 
 import pytest
-from xenon.repl.feature_extractor import FeatureExtractor
+
 from xenon.repl.context_manager import ContextManager
+from xenon.repl.feature_extractor import FeatureExtractor
 
 
 class TestFeatureExtractor:

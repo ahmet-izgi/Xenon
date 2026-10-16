@@ -6,9 +6,8 @@ import logging
 import os
 import threading
 from dataclasses import dataclass, field
-from typing import Any
-
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse
 
 import httpx

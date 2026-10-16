@@ -11,7 +11,6 @@ from typing import Any
 from xenon.repl.command_groups.common import confirm_action
 from xenon.repl.command_registry import command_handler, register_command
 
-
 # /memory ──────────────────────────────────────────────────
 
 register_command(

@@ -14,7 +14,6 @@ from pathlib import Path
 
 from xenon.repl.system_config import get_config
 
-
 # ── 项目类型检测标记 ───────────────────────────────────────
 
 _PROJECT_MARKERS: dict[str, str] = {

@@ -92,9 +92,10 @@ def test_providers_section_still_wins_over_flat(tmp_path):
 def test_startup_picker_returns_chosen_index(monkeypatch, capsys):
     """门前进会话选择器：选 1 → 返回 '1'；选 0 → None（新对话）。"""
 
+    import rich.prompt as rich_prompt
+
     import xenon.main as main_mod
     import xenon.repl.session as session_mod
-    import rich.prompt as rich_prompt
 
     fake_sessions = [
         {
@@ -123,9 +124,10 @@ def test_startup_picker_returns_chosen_index(monkeypatch, capsys):
 
 
 def test_startup_picker_new_conversation(monkeypatch):
+    import rich.prompt as rich_prompt
+
     import xenon.main as main_mod
     import xenon.repl.session as session_mod
-    import rich.prompt as rich_prompt
 
     monkeypatch.setattr(session_mod, "list_sessions", lambda: [{"name": "_auto", "messages": 1}])
     monkeypatch.setattr(session_mod, "get_session_age", lambda s: "刚刚")

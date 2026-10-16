@@ -15,6 +15,10 @@ import time
 
 import pytest
 
+from xenon.repl.prompt_optimizer import (
+    _is_dynamic_content,
+    optimize_messages_for_cache,
+)
 from xenon.utils.deepseek_cache import (
     CacheTracker,
     _hash_system_prompt,
@@ -22,15 +26,10 @@ from xenon.utils.deepseek_cache import (
 )
 from xenon.utils.llm_client import (
     LLMUsage,
+    _emit_response,
     _extract_usage,
     register_response_callback,
-    _emit_response,
 )
-from xenon.repl.prompt_optimizer import (
-    optimize_messages_for_cache,
-    _is_dynamic_content,
-)
-
 
 # ══════════════════════════════════════════════════════════════
 # 辅助

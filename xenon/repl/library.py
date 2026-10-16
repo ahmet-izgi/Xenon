@@ -78,8 +78,8 @@ class SkillEntry:
 
 def _http_fetch(url: str, timeout: float = 10.0) -> tuple[bool, str]:
     """从 URL 拉取文本。返回 (成功, 内容或错误信息)。"""
-    import urllib.request
     import urllib.error
+    import urllib.request
 
     try:
         req = urllib.request.Request(url)

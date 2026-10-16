@@ -1,9 +1,10 @@
 """v0.6.1: 子 Agent 系统 P0/P1/P2 测试。"""
 
-from unittest.mock import MagicMock, patch
 import unittest.mock
-from xenon.engine.react_engine import ReActEngine, BUILTIN_TOOLS
+from unittest.mock import MagicMock, patch
+
 from xenon.engine.context import AgentContext
+from xenon.engine.react_engine import BUILTIN_TOOLS, ReActEngine
 
 
 class TestSubAgentSystem:

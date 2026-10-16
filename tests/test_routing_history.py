@@ -7,9 +7,9 @@ import time
 from pathlib import Path
 
 from xenon.repl.routing_history import (
+    RingBuffer,
     RoutingHistory,
     RoutingRecord,
-    RingBuffer,
 )
 
 

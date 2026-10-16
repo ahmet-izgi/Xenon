@@ -14,13 +14,13 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
+from xenon.engine.context import AgentContext
 from xenon.nodes.tool_node import (
     ToolNode,
-    _ssrf_check_url,
     _is_internal_ip,
     _is_rfc1918_private,
+    _ssrf_check_url,
 )
-from xenon.engine.context import AgentContext
 
 # ── helpers ──────────────────────────────────────────────────
 
@@ -519,7 +519,7 @@ class TestRegisterTool:
 class TestDynamicTools:
     def test_register_and_execute_dynamic(self, tmp_path):
         """注册一个动态工具并执行它。"""
-        from xenon.nodes.tool_node import register_dynamic_tool, _DYNAMIC_TOOLS
+        from xenon.nodes.tool_node import _DYNAMIC_TOOLS, register_dynamic_tool
 
         tool_name = "test_dyn_tool"
 
@@ -638,7 +638,7 @@ class TestFallback:
 
     def test_ssrf_allowlist_wttr_in(self):
         """wttr.in 在 SSRF 白名单中。"""
-        from xenon.nodes.tool_node import _ssrf_check_url, _SSRF_DOMAIN_ALLOWLIST
+        from xenon.nodes.tool_node import _SSRF_DOMAIN_ALLOWLIST, _ssrf_check_url
 
         assert "wttr.in" in _SSRF_DOMAIN_ALLOWLIST
         ok, _ = _ssrf_check_url("https://wttr.in/Suzhou?lang=zh")
@@ -646,7 +646,7 @@ class TestFallback:
 
     def test_ssrf_allowlist_weather_com_cn(self):
         """weather.com.cn 在 SSRF 白名单中。"""
-        from xenon.nodes.tool_node import _ssrf_check_url, _SSRF_DOMAIN_ALLOWLIST
+        from xenon.nodes.tool_node import _SSRF_DOMAIN_ALLOWLIST, _ssrf_check_url
 
         assert "weather.com.cn" in _SSRF_DOMAIN_ALLOWLIST
         ok, _ = _ssrf_check_url("http://www.weather.com.cn/weather1d/101190401.shtml")

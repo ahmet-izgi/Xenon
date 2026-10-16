@@ -10,7 +10,6 @@ from __future__ import annotations
 
 from collections import OrderedDict
 
-
 PASTE_COMPACT_THRESHOLD = 1000
 
 

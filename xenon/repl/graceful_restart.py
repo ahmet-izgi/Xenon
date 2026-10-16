@@ -436,8 +436,8 @@ class GracefulRestartManager:
         reload_config()
 
         # 重建模型池
-        from xenon.repl.model_pool import ModelPool
         from xenon.repl.auto_router import AutoRouter
+        from xenon.repl.model_pool import ModelPool
 
         self.repl.model_pool = ModelPool()
         self.repl.auto_router = AutoRouter(

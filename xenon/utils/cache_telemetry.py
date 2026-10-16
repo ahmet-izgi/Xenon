@@ -21,7 +21,6 @@ from typing import Any
 
 from xenon.utils.token_estimate import estimate_text_tokens
 
-
 MANIFEST_RESPONSE_KEY = "_xenon_cache_manifest"
 _SCHEMA_VERSION = 2
 _SESSION_ID = secrets.token_hex(8)

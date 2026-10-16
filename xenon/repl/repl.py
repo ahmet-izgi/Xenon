@@ -19,59 +19,63 @@ import threading
 from pathlib import Path
 from typing import Any
 
-from rich.console import Console
 from rich import box
+from rich.console import Console
 from rich.panel import Panel
+from rich.prompt import Prompt
 from rich.table import Table
 from rich.text import Text
-from rich.prompt import Prompt
 from rich.theme import Theme
 
 from xenon.engine.context import AgentContext
 from xenon.nodes.approval_policy import (
     SessionRuleStore,
 )
+from xenon.repl.approval_ux import ApprovalUxMixin
 from xenon.repl.commands import COMMANDS, dispatch_command
 from xenon.repl.context_manager import ContextManager
 from xenon.repl.direct_chat import DirectChatMixin
-from xenon.repl.approval_ux import ApprovalUxMixin
 from xenon.repl.engine_host import EngineHostMixin
-from xenon.repl.session_ops import SessionOpsMixin
-from xenon.repl.turn_flow import TurnFlowMixin
 from xenon.repl.execution_policy import (
     ExecutionLevel,
-)
-from xenon.repl.turn_contract import (
-    PendingAction,
-    TurnContract,
-    build_turn_contract,
 )
 from xenon.repl.input_buffer import PastedTextStore, _ShiftTabSignal
 from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.project_context import ProjectContext
 from xenon.repl.repl_input import _read_input_unix, _read_input_windows
+from xenon.repl.session_ops import SessionOpsMixin
 from xenon.repl.status_bar import StatusBar
 from xenon.repl.system_config import get_config
-
+from xenon.repl.turn_contract import (
+    PendingAction,
+    TurnContract,
+    build_turn_contract,
+)
+from xenon.repl.turn_flow import TurnFlowMixin
 
 logger = logging.getLogger(__name__)
 
 # R1: 纯函数已提取到具名模块；这里保留兼容导出（历史调用点/测试）。
 from xenon.repl.turn_helpers import (  # noqa: E402
     _looks_like_external_query,  # noqa: F401 - compatibility export
+)
+from xenon.repl.turn_helpers import (  # noqa: E402
     retry_budget_for as _retry_budget_for,  # noqa: F401 - compatibility export
+)
+from xenon.repl.turn_helpers import (  # noqa: E402
     verify_retries_limit as _verify_retries_limit,  # noqa: F401 - compatibility export
 )
 
 # ── prompt_toolkit（可选依赖，不可用时回退自建输入）────────────
 try:
+    from pathlib import Path as _Path
+
     from prompt_toolkit import PromptSession
     from prompt_toolkit.application import run_in_terminal
+    from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.history import FileHistory
     from prompt_toolkit.key_binding import KeyBindings
     from prompt_toolkit.styles import Style
-    from prompt_toolkit.formatted_text import HTML
-    from pathlib import Path as _Path
 
     _HISTORY_DIR = _Path.home() / ".xenon"
     _HISTORY_DIR.mkdir(parents=True, exist_ok=True)
@@ -175,7 +179,7 @@ class REPL(EngineHostMixin, DirectChatMixin, TurnFlowMixin, ApprovalUxMixin, Ses
         )
 
         # ── 视觉桥接器（惰性加载） ──────────────────────────
-        from xenon.tools import VisionBridge, ClipboardMonitor
+        from xenon.tools import ClipboardMonitor, VisionBridge
 
         self._vision_bridge = VisionBridge()
         self._vision_enabled = True  # 默认开启，可 /vision 切换
@@ -194,8 +198,8 @@ class REPL(EngineHostMixin, DirectChatMixin, TurnFlowMixin, ApprovalUxMixin, Ses
         self._active_callback: Any = None
 
         # v0.4.0: Auto router + model pool (replaces role_priority)
-        from xenon.repl.model_pool import ModelPool
         from xenon.repl.auto_router import AutoRouter
+        from xenon.repl.model_pool import ModelPool
 
         self.model_pool = ModelPool()
         self.auto_router = AutoRouter(
@@ -338,6 +342,7 @@ class REPL(EngineHostMixin, DirectChatMixin, TurnFlowMixin, ApprovalUxMixin, Ses
 
         from prompt_toolkit.input.ansi_escape_sequences import ANSI_SEQUENCES
         from prompt_toolkit.keys import Keys
+
         from xenon.repl.completer import OmniCompleter
 
         # Terminals do not agree on a Shift+Enter wire encoding.  prompt_toolkit
@@ -528,6 +533,7 @@ class REPL(EngineHostMixin, DirectChatMixin, TurnFlowMixin, ApprovalUxMixin, Ses
 
         def input_height() -> int:
             import shutil
+
             from prompt_toolkit.utils import get_cwidth
 
             document = self._pt_session.default_buffer.document
@@ -599,7 +605,7 @@ class REPL(EngineHostMixin, DirectChatMixin, TurnFlowMixin, ApprovalUxMixin, Ses
         if getattr(self, "_startup_resume", None):
             return
         try:
-            from xenon.repl.session import list_sessions, get_session_age
+            from xenon.repl.session import get_session_age, list_sessions
 
             sessions = list_sessions()
             if not sessions:
@@ -2245,7 +2251,7 @@ class REPL(EngineHostMixin, DirectChatMixin, TurnFlowMixin, ApprovalUxMixin, Ses
 
     def _load_custom_commands(self) -> None:
         """加载自定义快捷指令和技能，动态注册为命令。"""
-        from xenon.repl.command_registry import register_command, _HANDLERS
+        from xenon.repl.command_registry import _HANDLERS, register_command
 
         # 加载快捷指令
         try:

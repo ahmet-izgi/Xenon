@@ -4,8 +4,14 @@ from __future__ import annotations
 
 from xenon.repl.command_groups.workspace import (
     _cmd_edit as grouped_cmd_edit,
+)
+from xenon.repl.command_groups.workspace import (
     _cmd_permissions as grouped_cmd_permissions,
+)
+from xenon.repl.command_groups.workspace import (
     _cmd_project as grouped_cmd_project,
+)
+from xenon.repl.command_groups.workspace import (
     _cmd_vision as grouped_cmd_vision,
 )
 from xenon.repl.commands import (

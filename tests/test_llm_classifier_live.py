@@ -18,8 +18,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from xenon.repl.difficulty_estimator import DifficultyEstimator
 from xenon.repl.llm_intent_classifier import (
-    get_llm_classifier,
     classify_intent_with_llm,
+    get_llm_classifier,
 )
 from xenon.repl.prompt_optimizer import detect_intent
 

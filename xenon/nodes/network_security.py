@@ -11,7 +11,6 @@ import ipaddress
 import socket
 from urllib.parse import urlparse
 
-
 MAX_REDIRECTS = 5
 
 

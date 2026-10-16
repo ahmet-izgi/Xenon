@@ -26,7 +26,6 @@ from xenon.repl.provider_registry import (
 )
 from xenon.repl.skill_manager import SkillManager
 
-
 _MCP_NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$")
 _CONFIG_BYTES = 256 * 1024
 

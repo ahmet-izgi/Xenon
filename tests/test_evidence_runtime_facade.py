@@ -6,12 +6,11 @@ from pathlib import Path
 
 from xenon.engine.context import AgentContext
 from xenon.engine.evidence_gate import FileClaimGate, GateVerdict
-
 from xenon.engine.evidence_runtime import (
+    EventKind,
     EvidenceLedger,
     EvidencePack,
     EvidenceRuntime,
-    EventKind,
     LifecyclePhase,
 )
 from xenon.nodes.tool_executor import ToolExecutor

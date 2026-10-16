@@ -8,15 +8,16 @@
 """
 
 import json
+
 import pytest
-from xenon.engine.reflection_engine import ReflectionEngine
+
+from xenon.engine.callbacks import SilentCallback
 from xenon.engine.combined_engines import (
     PlanReflectionEngine,
     ReactReflectionEngine,
 )
 from xenon.engine.context import AgentContext
-from xenon.engine.callbacks import SilentCallback
-
+from xenon.engine.reflection_engine import ReflectionEngine
 
 # ============================================================================
 # Reflection 引擎测试

@@ -8,15 +8,16 @@
 """
 
 import json
+
 import pytest
-from xenon.engine.react_engine import ReActEngine
-from xenon.engine.plan_execute_engine import PlanExecuteEngine
+
+from xenon.engine.callbacks import SilentCallback
 from xenon.engine.combined_engines import (
     PlanReactEngine,
 )
 from xenon.engine.context import AgentContext
-from xenon.engine.callbacks import SilentCallback
-
+from xenon.engine.plan_execute_engine import PlanExecuteEngine
+from xenon.engine.react_engine import ReActEngine
 
 # ============================================================================
 # 引擎测试

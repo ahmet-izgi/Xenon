@@ -1810,8 +1810,8 @@ class ReActEngine(BaseEngine):
             return "❌ 创建 skill 失败: steps 必须是非空数组"
 
         try:
-            from xenon.repl.skill_manager import SkillManager
             from xenon.repl.commands import _register_skill_handler
+            from xenon.repl.skill_manager import SkillManager
 
             manager = SkillManager()
             skill = manager.create(

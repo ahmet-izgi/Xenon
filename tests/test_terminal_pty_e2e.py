@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
 import re
 import select
 import shutil
 import struct
+from pathlib import Path
+
 import pytest
 
 # Windows 无 POSIX pty/fcntl：跳过整个模块（CI/本机测试收集不再中断）。
@@ -19,7 +20,6 @@ import termios  # noqa: E402
 import time  # noqa: E402
 
 import pytest  # noqa: E402
-
 
 pytestmark = pytest.mark.e2e
 _REPO_ROOT = Path(__file__).resolve().parents[1]

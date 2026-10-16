@@ -312,8 +312,9 @@ class TestGracefulRestartIntegration:
 
     def test_concurrent_restart_requests(self, mock_full_repl):
         """并发重启请求：协调器正确处理。"""
-        from xenon.repl.graceful_restart import GracefulRestartManager
         import threading
+
+        from xenon.repl.graceful_restart import GracefulRestartManager
 
         manager = GracefulRestartManager(mock_full_repl)
 

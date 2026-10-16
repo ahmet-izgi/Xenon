@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-from xenon.nodes.tool_node import ToolNode, SecurityError
+from xenon.nodes.tool_node import SecurityError, ToolNode
 
 
 class TestCommandValidateQuoted:
@@ -193,8 +193,8 @@ class TestWindowsSensitivePaths:
     """P2-10：Windows 敏感路径条目（反斜杠）必须真的命中。"""
 
     def test_windows_drive_paths_are_sensitive(self, tmp_path):
-        from xenon.nodes.tool_node import ToolNode, SecurityError
         from xenon.nodes.path_targets import resolve_target_path
+        from xenon.nodes.tool_node import SecurityError, ToolNode
 
         node = ToolNode.__new__(ToolNode)
         node.security_enabled = True

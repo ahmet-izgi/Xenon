@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+from xenon.repl.auto_router import AutoRouter
 from xenon.repl.difficulty_estimator import (
     DifficultyEstimator,
 )
-from xenon.repl.auto_router import AutoRouter
 from xenon.repl.model_pool import ModelPool
 
 

@@ -28,15 +28,19 @@ if str(_REPO_ROOT) not in sys.path:
 
 from datasets import load_dataset  # noqa: E402
 
+from evals.swebench_runtime import (  # noqa: E402
+    create_official_runtime,
+    prepare_official_source,
+)
 from xenon.engine.builtin_engines import STANDARD_STEP_BUDGET  # noqa: E402
 from xenon.engine.callbacks import EngineCallback  # noqa: E402
+from xenon.engine.coding_contract import finalize_coding_run  # noqa: E402
 from xenon.engine.combined_engines import (  # noqa: E402
     PlanReactEngine,
     PlanReflectionEngine,
     ReactReflectionEngine,
 )
 from xenon.engine.context import AgentContext  # noqa: E402
-from xenon.engine.coding_contract import finalize_coding_run  # noqa: E402
 from xenon.engine.execution_policy import (  # noqa: E402
     ExecutionPolicy,
     bind_execution_policy,
@@ -47,11 +51,6 @@ from xenon.engine.reflection_engine import ReflectionEngine  # noqa: E402
 from xenon.engine.tool_runtime import bind_tool_runtime  # noqa: E402
 from xenon.repl.model_registry import ModelConfig  # noqa: E402
 from xenon.utils.llm_client import UsageTracker, chat_completion  # noqa: E402
-
-from evals.swebench_runtime import (  # noqa: E402
-    create_official_runtime,
-    prepare_official_source,
-)
 
 
 def _all_engines() -> tuple[str, ...]:

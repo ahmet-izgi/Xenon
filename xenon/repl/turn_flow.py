@@ -20,6 +20,8 @@ from xenon.repl.execution_policy import (
     ExecutionPolicy,
     bind_execution_boundary,
 )
+from xenon.repl.prompt_optimizer import get_intent_display, optimize_prompt
+from xenon.repl.system_config import get_config
 from xenon.repl.turn_contract import (
     PendingAction,
     TurnContract,
@@ -29,8 +31,6 @@ from xenon.repl.turn_contract import (
     is_continuation_utterance,
     should_consume_pending,
 )
-from xenon.repl.prompt_optimizer import get_intent_display, optimize_prompt
-from xenon.repl.system_config import get_config
 from xenon.session.query import needs_recall
 
 logger = logging.getLogger(__name__)

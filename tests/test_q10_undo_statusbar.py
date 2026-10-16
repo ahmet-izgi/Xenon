@@ -9,7 +9,6 @@ from rich.console import Console
 from xenon.repl.context_manager import ContextManager
 from xenon.repl.status_bar import StatusBar
 
-
 # --------------------------- _undo_stack 上限 ---------------------------
 
 

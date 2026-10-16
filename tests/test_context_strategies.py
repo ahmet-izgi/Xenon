@@ -1,20 +1,20 @@
 """v0.5.0: 分层上下文策略测试。"""
 
 import pytest
+
 from xenon.repl.context_strategies import (
+    ImportanceCalculator,
+    SpaceBudget,
     TieredStrategySelector,
     ToolOutputClassifier,
     ToolOutputType,
-    ImportanceCalculator,
-    SpaceBudget,
-    handle_crisis,
+    _compress_meta,
+    _compress_mutation,
+    _compress_pointer,
     _compress_structural,
     _compress_transient,
-    _compress_pointer,
-    _compress_mutation,
-    _compress_meta,
+    handle_crisis,
 )
-
 
 # ── 策略选择 ────────────────────────────────────────────────
 

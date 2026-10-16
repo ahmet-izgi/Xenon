@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from xenon.repl.model_pool import (
+    FAILURE_THRESHOLD,
     ModelPool,
     _infer_capability,
-    FAILURE_THRESHOLD,
 )
 
 

@@ -5,13 +5,13 @@ from __future__ import annotations
 import pytest
 
 from xenon.repl.batch_register import (
+    ModelSpec,
     batch_register,
     parse_file,
     validate,
-    ModelSpec,
 )
-from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.model_pool import ModelPool
+from xenon.repl.model_registry import ModelRegistry
 
 
 class TestParse:

@@ -11,7 +11,6 @@ from xenon.repl.repl import REPL
 from xenon.repl.task_state import build_task_state_block
 from xenon.repl.turn_contract import PendingAction, build_turn_contract
 
-
 # ── 状态块 ─────────────────────────────────────────────────
 
 

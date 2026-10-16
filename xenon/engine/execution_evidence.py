@@ -15,7 +15,6 @@ from typing import Any
 
 from xenon.engine.tool_tracker import ToolCall, ToolExecutionTracker
 
-
 MUTATING_TOOLS = frozenset(
     {
         "write_file",

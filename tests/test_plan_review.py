@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import sys
 
-
 from xenon.engine.context import AgentContext
 from xenon.nodes import tool_executor as te_mod
 from xenon.nodes.tool_executor import ToolExecutor

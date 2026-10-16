@@ -23,9 +23,9 @@ from urllib.parse import urlencode, urlparse
 import httpx
 import yaml
 
+from xenon.repl.system_config import get_config
 from xenon.utils.atomic_write import atomic_write_text
 from xenon.utils.llm_client import _create_http_client
-from xenon.repl.system_config import get_config
 
 
 def _get_credentials_path() -> Path:

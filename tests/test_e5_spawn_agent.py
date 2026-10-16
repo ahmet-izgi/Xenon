@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import json
 
-
 import xenon.engine.base as base
 from xenon.engine.context import AgentContext
 from xenon.engine.react_engine import BUILTIN_TOOLS, ReActEngine

@@ -9,8 +9,8 @@ import pytest
 from rich.console import Console
 from rich.panel import Panel
 
-from xenon.engine.context import AgentContext
 from xenon.engine.callbacks import SilentCallback
+from xenon.engine.context import AgentContext
 from xenon.engine.react_engine import BUILTIN_TOOLS, ReActEngine
 from xenon.nodes.tool_executor import ToolExecutor, classify_tool
 from xenon.repl.permissions import (
