@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+import yaml
+
 from xenon.repl.model_registry import ModelRegistry
 from xenon.repl.setup_wizard import (
     _clean_api_key,
@@ -148,3 +150,62 @@ def test_purge_preserves_other_provider_role():
     # ds 仍可用，planner 仍指向它
     assert reg.get_model("ds") is not None
     assert "ds" in reg.role_priority.get("planner", [])
+
+
+def _configured_test_providers():
+    return [
+        SimpleNamespace(key="openai", name="OpenAI"),
+        SimpleNamespace(key="anthropic", name="Anthropic"),
+    ]
+
+
+def _scripted_int_prompt(responses: list[int], choices: list[str]):
+    responses = iter(responses)
+
+    def ask(*args, **kwargs):
+        assert kwargs["choices"] == choices
+        return next(responses)
+
+    return ask
+
+
+def test_remove_api_key_cancel_then_selected_provider_only(monkeypatch, tmp_path):
+    import xenon.repl.setup_wizard as sw
+
+    credentials_path = tmp_path / "credentials.yaml"
+    credentials_path.write_text(
+        "openai: openai-test-key\nanthropic: anthropic-test-key\n",
+        encoding="utf-8",
+    )
+    original_contents = credentials_path.read_bytes()
+    monkeypatch.setenv("XENON_CREDENTIALS_PATH", str(credentials_path))
+    monkeypatch.setattr(sw, "get_configured_providers", _configured_test_providers)
+    monkeypatch.setattr(
+        sw.IntPrompt, "ask", _scripted_int_prompt([0, 2], ["0", "1", "2"])
+    )
+    monkeypatch.setattr(sw.Confirm, "ask", lambda *args, **kwargs: True)
+
+    registry = ModelRegistry()
+    registry.add_model("openai/gpt-4", "gpt4")
+    registry.add_model("anthropic/claude-3-haiku", "claude")
+    registry.add_model("deepseek/deepseek-chat", "ds")
+    registry.assign_role("planner", ["claude", "ds"])
+
+    original_models = dict(registry.models)
+    original_roles = dict(registry.role_priority)
+
+    # A zero choice must leave credentials and the model registry untouched.
+    sw._remove_api_key(registry)
+
+    assert credentials_path.read_bytes() == original_contents
+    assert registry.models == original_models
+    assert registry.role_priority == original_roles
+
+    # Selecting provider 2 must remove only Anthropic credentials and models.
+    sw._remove_api_key(registry)
+
+    assert yaml.safe_load(credentials_path.read_text(encoding="utf-8")) == {
+        "openai": "openai-test-key"
+    }
+    assert list(registry.models) == ["gpt4", "ds"]
+    assert registry.role_priority["planner"] == ["ds"]
