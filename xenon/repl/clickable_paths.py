@@ -191,6 +191,9 @@ def format_output_with_links(text: str) -> str:
                 continue
             close_start = line.find(close_marker, uri_end + len(_ST))
             if close_start == -1:
+                # A malformed/unclosed link still owns the rest of this line;
+                # do not wrap path-like text from its URI or label.
+                spans.append((start, len(line)))
                 break
             end = close_start + len(close_marker)
             spans.append((start, end))
