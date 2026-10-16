@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import ctypes
 import os
+import re
 import sys
 import threading
 import time
@@ -54,11 +55,11 @@ class _FakeStdin:
 
 @pytest.fixture
 def unix_pty(monkeypatch):
-    if sys.platform == "win32":
-        pytest.skip("POSIX pty not available on Windows")
-    import pty
-
-    master, slave = pty.openpty()
+    pty = pytest.importorskip("pty")
+    try:
+        master, slave = pty.openpty()
+    except OSError as exc:
+        pytest.skip(f"pty unavailable: {exc}")
     monkeypatch.setattr(sys, "stdin", _FakeStdin(slave))
     try:
         yield master, slave
@@ -82,7 +83,7 @@ def _drive_unix(unix_pty, chunks, timeout=5.0):
         except BaseException as exc:  # noqa: BLE001 — 透传给主线程断言
             result["exc"] = exc
 
-    t = threading.Thread(target=worker)
+    t = threading.Thread(target=worker, daemon=True)
     t.start()
     time.sleep(0.05)  # 让 worker 进入 select / os.read 阻塞
     for data, delay in chunks:
@@ -103,6 +104,20 @@ def test_unix_plain_input_returns_text(unix_pty, capfd):
     # 进入时启用、退出时禁用粘贴括号模式
     assert "\x1b[?2004h" in out
     assert "\x1b[?2004l" in out
+
+
+def test_unix_empty_line_returns_empty_string(unix_pty):
+    res, _ = _drive_unix(unix_pty, [(b"\n", 0)])
+    assert res["value"] == ""
+
+
+def test_unix_long_line_paste_returns_full_text(unix_pty):
+    # 超过 PASTE_COMPACT_THRESHOLD（1000）的粘贴走 compact/expand 路径：
+    # 提交时必须还原完整文本，而不是 UI token
+    text = "a" * 2000
+    payload = b"\x1b[200~" + text.encode() + b"\x1b[201~\n"
+    res, _ = _drive_unix(unix_pty, [(payload, 0)])
+    assert res["value"] == text
 
 
 def test_unix_backspace_deletes_char_before_cursor(unix_pty):
@@ -183,6 +198,21 @@ def test_unix_bracketed_paste_multiline_spans_turns(unix_pty):
     assert res["value"] == "line1\nline2"
 
 
+def test_unix_bracketed_paste_cjk_counts_two_columns(unix_pty, capfd):
+    """宽字符按 2 列计算：两个 CJK 字符的结尾光标列数应比两个 ASCII 多 2。"""
+
+    def last_cursor_col() -> int:
+        matches = re.findall(r"\r\x1b\[(\d+)C", capfd.readouterr().out)
+        assert matches, "output 中未找到光标定位转义"
+        return int(matches[-1])
+
+    _drive_unix(unix_pty, [(b"\x1b[200~ab\x1b[201~\n", 0)])
+    ascii_col = last_cursor_col()
+    res, _ = _drive_unix(unix_pty, [("\x1b[200~你好\x1b[201~\n".encode(), 0)])
+    assert res["value"] == "你好"
+    assert last_cursor_col() == ascii_col + 2
+
+
 def test_unix_right_arrow_moves_cursor_back(unix_pty):
     res, _ = _drive_unix(unix_pty, [(b"ac\x1b[D\x1b[Cb\n", 0)])
     assert res["value"] == "acb"
@@ -218,6 +248,33 @@ def test_unix_paste_mode_recovers_when_end_marker_lost(unix_pty):
     # 缺少 \x1b[201~ 结束标记：0.3s 无新字节后自动落盘，后续回车正常提交
     res, _ = _drive_unix(unix_pty, [(b"\x1b[200~abc", 0.45), (b"\n", 0)])
     assert res["value"] == "abc"
+
+
+def test_unix_without_bracketed_paste_newline_submits_per_line(unix_pty):
+    """未启用粘贴括号模式时（无 \x1b[200~ 标记），每个换行独立提交一行。"""
+    master, _slave = unix_pty
+    repl = _FakeRepl()
+
+    def read_after_write(data: bytes) -> str:
+        result: dict = {}
+
+        def worker():
+            try:
+                result["value"] = _read_input_unix(repl)
+            except BaseException as exc:  # noqa: BLE001 — 透传给主线程断言
+                result["exc"] = exc
+
+        t = threading.Thread(target=worker, daemon=True)
+        t.start()
+        time.sleep(0.2)  # 等 setraw（TCSAFLUSH 丢弃未读输入）完成后再写入
+        os.write(master, data)
+        t.join(5)
+        assert not t.is_alive(), "_read_input_unix 未在超时内返回"
+        assert "exc" not in result, result.get("exc")
+        return result["value"]
+
+    assert read_after_write(b"a\n") == "a"
+    assert read_after_write(b"b\n") == "b"
 
 
 def test_unix_unknown_escape_sequence_discarded(unix_pty):
@@ -281,6 +338,17 @@ def _run_windows(monkeypatch, keys, shift_states=()):
 def test_windows_plain_input_submits(monkeypatch):
     _repl, value, _calls = _run_windows(monkeypatch, list("hello") + ["\r"])
     assert value == "hello"
+
+
+def test_windows_empty_input_submits_empty_string(monkeypatch):
+    _repl, value, _calls = _run_windows(monkeypatch, ["\r"])
+    assert value == ""
+
+
+def test_windows_long_line_returns_full_text(monkeypatch):
+    text = "x" * 2000
+    _repl, value, _calls = _run_windows(monkeypatch, list(text) + ["\r"])
+    assert value == text
 
 
 def test_windows_backspace_uses_ansi_for_ascii(monkeypatch):
