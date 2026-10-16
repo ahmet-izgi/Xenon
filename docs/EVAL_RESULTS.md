@@ -300,3 +300,34 @@ python evals/runner.py \
   `D:\wsl\Ubuntu\ext4.vhdx`；数据集走 `hf-mirror.com` 并启用 `HF_HUB_OFFLINE=1` 离线加载。
 - 主运行与官方判定已排队自动执行（systemd：`swebench-pull` → `swebench-run` →
   `swebench-grade`），原始产物统一保存于 `D:\swebench\runs\main-30-70c6d79\`。
+
+### 9.6 结果（2026-10-16）
+
+**官方判定**（`swebench.harness.run_evaluation`，run_id `xenon-react-main30-70c6d79`）：
+
+| 指标 | 值 |
+|---|---|
+| 提交实例 | 30 |
+| 完成判定 | 28（ 2 个空补丁按官方口径单独计数） |
+| **resolved** | **25** |
+| unresolved | 3 |
+| empty_patch | 2 |
+| errors | 0 |
+| raw resolved（30 为分母） | 25/30 = 83.3% |
+| resolved（剔除空补丁，28 为分母） | 25/28 = 89.3% |
+
+按仓库分层：django 11/11、matplotlib 2/2、sphinx 2/2、pytest 2/2、scikit-learn 2/2、astropy 1/1、psf/requests 1/1、pylint 1/1、**sympy 3/8**（失败集中在 sympy）。
+
+失败分类（全部为模型侧，无 infra 失败）：
+- 空补丁 ×2：`sympy-13895`（3 次 edit_file 均因“编辑未产生任何变化”被工具拒绝，最终零改动）；`sympy-23262`（全程未尝试编辑）
+- unresolved ×3：`sympy-11897` / `sympy-13146` / `sympy-14817`——补丁应用成功但 FAIL_TO_PASS 未过；其中 11897 还引入了 PASS_TO_PASS 回归（`test_latex_basic`）
+
+过程指标：LLM 调用 1034 次、成功工具调用 899 次；单例 LLM 调用中位数 22（min 9 / max 121，含重试），绝大多数实例远未触及 120 步预算；agent 阶段 1h21m，官方判定 19min。估算 LLM 成本 ≈ ¥4–6（按 v4-flash 本地定价表，输入 ~20k/调用、缓存命中 ~90% 估算；逐调用 token 用量未落入 trace，故为估算值）。
+
+> ⚠️ **可比性声明（重要）**：本次运行中，运行时会先把官方 test patch 应用并提交进 agent 工作树（每个工作树可见 `apply test_patch (eval)` 提交，见 `evals/swebench_runtime.py` 的 v0.8.3 注释），因此 **agent 在解题时可以看到官方隐藏测试**。这与 SWE-bench 官方协议（解题阶段不可见测试，评分阶段才应用）不一致，**该 25/30 不能与 SWE-bench 榜单或其他盲测数字直接比较**，应永远表述为「测试可见（test-visible）变体」。
+>
+> 已做核查：(a) 全部 30 个补丁均未修改真实测试文件（命中的 `src/_pytest/*` 是 pytest 自身源码，非测试文件）；(b) 抽查 3 个实例（astropy-12907 / django-10914 / sympy-13146）的 trace，未发现读取测试文件的行为；抽查不构成全量证明。(c) 代码注释称「OpenHands/SWE-agent 等主流框架在 agent 运行时都会应用 test_patch」——此说法与官方协议不符，需核实并在未来修正。
+>
+> 下一步二选一：① 按标准协议（解题阶段不应用 test patch）重跑同 30 例，得到可与榜单同口径的数字；② 保留本次结果，但任何对外表述必须始终标注「测试可见变体」。
+
+**产物**：`D:\swebench\runs\main-30-70c6d79\`（30 行 predictions / traces / events / official-eval.log；逐实例判定报告在 WSL `/root/logs/run_evaluation/xenon-react-main30-70c6d79/`）。
