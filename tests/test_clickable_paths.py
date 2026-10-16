@@ -48,6 +48,16 @@ def test_is_likely_path_rejects_prose_fragments():
     assert not cp._is_likely_path("yes/no/maybe")
 
 
+def test_is_likely_path_accepts_existing_extensionless_relative_path(tmp_path, monkeypatch):
+    target = tmp_path / "docs" / "guide" / "setup"
+    target.parent.mkdir(parents=True)
+    target.write_text("setup instructions", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+
+    assert cp._is_likely_path("docs/guide/setup")
+    assert not cp._is_likely_path("docs/guide/missing")
+
+
 # ── format_output_with_links ─────────────────────────────
 
 
@@ -112,6 +122,18 @@ def test_parameterized_osc8_links_are_preserved_without_double_wrapping():
 
     assert cp.format_output_with_links(link) == link
     assert cp.format_output_with_links(cp.format_output_with_links(link)) == link
+
+
+def test_malformed_osc8_sequences_do_not_break_path_formatting():
+    malformed_links = (
+        f"{ESC}]8;id=1",  # no separator between parameters and URI
+        f"{ESC}]8;id=1;not-a-path",  # no string terminator
+        f"{ESC}]8;;{ESC}\\",  # a closing marker without an opening link
+        f"{ESC}]8;;file://not-a-path{ESC}\\label",  # no closing marker
+    )
+
+    for link in malformed_links:
+        assert cp.format_output_with_links(link) == link
 
 
 def test_windows_path_with_line_number_is_converted():
