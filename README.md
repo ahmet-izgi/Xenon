@@ -179,8 +179,10 @@ source .venv/bin/activate && pip install -e .   # Linux / macOS
 
 <!-- 按榜单影响力排序；新收录在合并后插入到对应位置 -->
 
+- [Awesome-MCP-ZH](https://github.com/yzfly/Awesome-MCP-ZH) — 中文 MCP 资源精选（MCP 客户端 → 可验证的终端编码代理）
 - [awesome-opensource-ai](https://github.com/alvinreal/awesome-opensource-ai) — 开源 AI 项目清单（Agentic AI & Multi-Agent Systems → Autonomous Coding Agents）
 - [awesome-mcp-lists](https://github.com/collabnix/awesome-mcp-lists) — Collabnix 社区的 MCP 客户端 / 工具清单（MCP Clients → Command Line Tools）
+- [awesome-ai-coding-tools](https://github.com/mahmoudsajjadi/awesome-ai-coding-tools) — AI 编码工具三层分类清单（CLI coding agents；致谢 @xianyu-sheng）
 
 ## License
 

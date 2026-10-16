@@ -331,3 +331,17 @@ python evals/runner.py \
 > 下一步二选一：① 按标准协议（解题阶段不应用 test patch）重跑同 30 例，得到可与榜单同口径的数字；② 保留本次结果，但任何对外表述必须始终标注「测试可见变体」。
 
 **产物**：`D:\swebench\runs\main-30-70c6d79\`（30 行 predictions / traces / events / official-eval.log；逐实例判定报告在 WSL `/root/logs/run_evaluation/xenon-react-main30-70c6d79/`）。
+
+### 9.7 盲测重跑（2026-10-16 启动）
+
+为得到与官方协议（解题阶段测试不可见）及 v0.8.2 盲测基准可直接比较的数字，用同一 30 例清单与同一冻结配置重跑，唯一变化是解题阶段不应用 test patch：
+
+| 字段 | 值 |
+|---|---|
+| 源码 | `9d43c7d`（新增 `XENON_EVAL_APPLY_TEST_PATCH=0` 开关） |
+| 协议 | `XENON_EVAL_APPLY_TEST_PATCH=0`；已核验盲测工作树中无 `apply test_patch (eval)` 提交（主运行同实例有 1 个） |
+| 配置 | react / 120 步 / `deepseek-v4-flash` 官方 API / reasoning off |
+| 清单 | 同一 manifest（digest `efc755a153a340094db95b176f0ad88881d65006e9f831f3e955710f7b823630`） |
+| 产物 | `D:\swebench\runs\blind-30-9d43c7d\` |
+
+盲测结果出来后与 9.6（测试可见）及 v0.8.2 盲测（react 9/30 instance-level）三方并列报告。

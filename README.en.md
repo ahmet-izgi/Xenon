@@ -179,8 +179,10 @@ source .venv/bin/activate && pip install -e .   # Linux / macOS
 
 <!-- Ordered by list prominence; insert new entries in place once merged. -->
 
+- [Awesome-MCP-ZH](https://github.com/yzfly/Awesome-MCP-ZH) — curated Chinese MCP resource list (MCP Clients → verifiable terminal coding agent)
 - [awesome-opensource-ai](https://github.com/alvinreal/awesome-opensource-ai) — open-source AI project list (Agentic AI & Multi-Agent Systems → Autonomous Coding Agents)
 - [awesome-mcp-lists](https://github.com/collabnix/awesome-mcp-lists) — Collabnix community list of MCP servers, clients and toolkits (MCP Clients → Command Line Tools)
+- [awesome-ai-coding-tools](https://github.com/mahmoudsajjadi/awesome-ai-coding-tools) — 3-tier taxonomy of AI coding tools (CLI coding agents; special thanks to @xianyu-sheng)
 
 ## License
 
