@@ -292,7 +292,10 @@ def create_official_runtime(
     #   agent 修代码 → 跑测试失败 → 验证循环反馈失败详情 → 再修 → 通过
     # 应用后立即 commit，使最终 git diff 只反映 agent 的修改。
     test_patch = instance.get("test_patch") or ""
-    if test_patch.strip():
+    # 盲测协议（与官方 SWE-bench 一致）：解题阶段不向 agent 暴露评测测试。
+    # 默认保持测试可见（v0.8.3 行为）；设 XENON_EVAL_APPLY_TEST_PATCH=0 关闭。
+    apply_tests = os.environ.get("XENON_EVAL_APPLY_TEST_PATCH", "1").strip() != "0"
+    if test_patch.strip() and apply_tests:
         _apply_test_patch(worktree, test_patch, instance["instance_id"])
 
     client, spec = _docker_and_spec(instance, namespace)
